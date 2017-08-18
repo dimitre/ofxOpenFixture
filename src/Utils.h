@@ -31,7 +31,7 @@ namespace openfixture {
         return (*p == 0) ;
     }
 
-    std::vector<std::string> split(std::string str, char delimiter) {
+   inline std::vector<std::string> split(std::string str, char delimiter) {
         std::vector<std::string> internal;
         std::stringstream ss(str); // Turn the string into a stream.
         std::string tok;
@@ -45,7 +45,7 @@ namespace openfixture {
     
     
     
-    std::string filterString(const std::string& input ){
+   inline std::string filterString(const std::string& input ){
         
         std::string result = input;
         

@@ -20,7 +20,7 @@ namespace openfixture{
 
     
     
-    std::vector <std::vector <std::string>> loadSchemeFromString( std::string s ){
+    inline std::vector <std::vector <std::string>> loadSchemeFromString( std::string s ){
         
         std::vector <std::vector<std::string>> saida;
         std::istringstream iss(s);
@@ -73,7 +73,7 @@ namespace openfixture{
         
     }
     
-    std::vector <std::vector <std::string>> loadScheme(std::string file_path) {
+   inline std::vector <std::vector <std::string>> loadScheme(std::string file_path) {
         std::vector <std::vector< std::string>> saida;
         
         std::ifstream file( file_path );
@@ -125,7 +125,7 @@ namespace openfixture{
     }
 
 
-    ofix::Definition* createDefinitionFromScheme(const std::vector< std::vector<std::string>>& s ){
+    inline ofix::Definition* createDefinitionFromScheme(const std::vector< std::vector<std::string>>& s ){
         
         ofix::Definition* def = nullptr;
         for(auto r :  s){
@@ -147,7 +147,7 @@ namespace openfixture{
     }
 
     
-    ofix::Universe createUniverseFromScheme( const std::vector< std::vector<std::string>>& scheme ){
+   inline ofix::Universe createUniverseFromScheme( const std::vector< std::vector<std::string>>& scheme ){
         
         
         Universe uni;
