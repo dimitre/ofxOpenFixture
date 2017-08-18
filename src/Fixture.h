@@ -20,6 +20,7 @@
 namespace openfixture {
     
     class Fixture;
+    typedef std::shared_ptr<Fixture> FixtureRef;
     
     class Definition{
     public:
@@ -44,9 +45,20 @@ namespace openfixture {
             return &(*globalDefinitions[name_]);
         }
         
-        // name, def map
-        static std::map< std::string,  std::unique_ptr<Definition>> globalDefinitions;
         
+        void addMode(const std::map<std::string, int> mode){
+            modes.push_back( mode );
+        }
+        
+        std::vector< Fixture* > getFixtures(){
+            return mFixtures;
+        };
+        
+        
+        friend Fixture;
+    private:
+        
+        static std::map< std::string,  std::unique_ptr<Definition>> globalDefinitions;
         
         // Member ------
         uint16_t getChannelByName(Fixture* fixture,  const std::string& name);
@@ -54,12 +66,12 @@ namespace openfixture {
         
         
         std::vector< std::map<std::string, int>> modes;
-        std::vector< Fixture* > fixtures;
+        std::vector< Fixture* > mFixtures;
         std::string name;
     };
     
 
-    typedef std::shared_ptr<Fixture> FixtureRef;
+    
     class Fixture{
         
     public:
@@ -70,7 +82,7 @@ namespace openfixture {
         
         Fixture( Definition* def ) : mDefPtr(def){
             mChannels.resize( mDefPtr->getMaxChannels(this) );
-            def->fixtures.push_back( this );
+            def->mFixtures.push_back( this );
         }
         
         static FixtureRef create( Definition* def ){
@@ -138,20 +150,12 @@ namespace openfixture {
     
     
     
-    typedef std::shared_ptr< class Universe> UniverseRef;
     class Universe{
         
     public:
         Universe(){
             
         }
-        
-        static UniverseRef create(){
-
-            return std::make_shared<Universe>();
-            
-        }
-        
         
         void setFixture(int atChannel, FixtureRef fix ){
             
@@ -201,7 +205,6 @@ namespace openfixture {
             for(auto fix : fixturesMap){
                 fixtures.push_back( fix.second );
             }
-            
             
             return fixtures;
         }

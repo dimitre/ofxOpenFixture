@@ -18,7 +18,12 @@
 
 namespace openfixture{
 
-    
+    // TODO---
+    struct Scheme{
+        std::string name = "";
+        std::map< std::string, std::vector<std::string>>  values;
+    };
+    // ---
     
     inline std::vector <std::vector <std::string>> loadSchemeFromString( std::string s ){
         
@@ -66,11 +71,8 @@ namespace openfixture{
             }
             
         }
-         
-         
+        
         return saida;
-        
-        
     }
     
    inline std::vector <std::vector <std::string>> loadScheme(std::string file_path) {
@@ -118,90 +120,11 @@ namespace openfixture{
                     saida[currentIndex].push_back(s);
                 }
             }
-            
         }
-        
+
         return saida;
     }
 
-
-    inline ofix::Definition* createDefinitionFromScheme(const std::vector< std::vector<std::string>>& s ){
-        
-        ofix::Definition* def = nullptr;
-        for(auto r :  s){
-            
-            def = ofix::Definition::createDefinition(r[0]);
-            
-            r.erase(r.begin()); // remove title
-            std::map<std::string, int> chanelDef;
-            
-            for( auto rr : r ){
-                auto nameValue = split( rr, '=' );
-                chanelDef[ nameValue[1] ] = stoi( nameValue[0] );
-            }
-            
-            def->modes.push_back( chanelDef );
-        }
-        
-        return def;
-    }
-
-    
-   inline ofix::Universe createUniverseFromScheme( const std::vector< std::vector<std::string>>& scheme ){
-        
-        
-        Universe uni;
-        
-        for(auto fix : scheme){
-            
-            std::string name = fix[0];
-            
-            fix.erase(fix.begin());
-            
-            auto defGlobal = ofix::Definition::getDefinitionByName( name );
-            
-            if( defGlobal == nullptr){
-                
-                std::cout << "error no definition name: " << name << std::endl;
-                continue;
-            }
-            
-            auto mFix =  ofix::Fixture::create( defGlobal );
-            mFix->setMode(0);
-            
-            
-            int channel = -1;
-            
-            for( auto ff : fix){
-                
-                auto nameValue = ofix::split( ff, '=' );
-                
-                std::string name = nameValue[0];
-                
-                if( nameValue[0] == "channel" ){
-                    int value = stoi( nameValue[1] );
-                    channel = value;
-                }else if( nameValue[0] == "mode" ){
-                    
-                    int value = stoi( nameValue[1] );
-                    mFix->setMode(value);
-
-                }else{
-                    mFix->customProp[nameValue[0]] = nameValue[1];
-                }
-
-            }
-            
-            
-            if( channel != -1 ){
-                uni.setFixture(channel, mFix);
-            }else{
-                uni.appendFixture(mFix);
-            }
-        }
-      
-        return uni;
-    }
 }// eof namespace
 
 #endif /* OpenFixtureDmtr_h */
