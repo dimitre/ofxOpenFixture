@@ -202,7 +202,6 @@ namespace openfixture{
       
         return uni;
     }
-    
 }// eof namespace
 
 #endif /* OpenFixtureDmtr_h */
