@@ -50,7 +50,10 @@ namespace openfixture {
                 std::string name = fix[0];
                 
                 fix.erase(fix.begin());
-                
+
+				
+
+				
                 auto defGlobal = ofix::Definition::getDefinitionByName( name );
                 
                 if( defGlobal == nullptr){
@@ -61,8 +64,12 @@ namespace openfixture {
                 
                 auto mFix =  ofix::Fixture::create( defGlobal );
                 mFix->setMode(0);
-                
-                
+				
+				// Dimitre inseriu
+				mFix->customProp["model"] = name;
+				//cout << name << endl;
+
+				
                 int channel = -1;
                 
                 for( auto ff : fix){
@@ -151,7 +158,11 @@ namespace openfixture {
         }
 
         
-        
+//		std::vector< ofix::Definition* > getDefinitions(){
+//			
+//			return Definitions::
+//			
+//		}
         std::vector< ofix::Universe* > getUniverses(){
             
             std::vector< ofix::Universe* > result;
