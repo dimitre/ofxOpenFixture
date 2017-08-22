@@ -26,37 +26,57 @@ namespace openfixture {
             ofix::Definition* def = nullptr;
             for(auto r :  s){
                 
-                def = ofix::Definition::createDefinition(r[0]);
+                std::string defName = r[0];
                 
+                def = ofix::Definition::createDefinition(defName);
+
                 r.erase(r.begin());
+                
                 std::map<std::string, int> chanelDef;
+                std::map<std::string, std::string> propsDef;
                 
                 std::vector<std::string> channelsNames;
                 std::vector<int> defaultValues;
                 
                 for( auto rr : r ){
                     
+                    cout << "rr: " << rr << std::endl;
+                    
                     auto nameValue = split( rr, '=' );
                     
-                    auto values = split( nameValue[1], ',' );
+
                     
-                    if( values.size() > 1 ){
-                        defaultValues.push_back( stoi( values[1] ) );
+                    
+                    if(  isInteger( nameValue[0] ) ){
+                        // add a channel definitiion
+                    
+                        
+                        auto values = split( nameValue[1], ',' );
+                        
+                        if( values.size() > 1 ){
+                            defaultValues.push_back( stoi( values[1] ) );
+                        }else{
+                            defaultValues.push_back( 0 );
+                        }
+                        
+                        chanelDef[ values[0] ] = stoi( nameValue[0] );
+                        channelsNames.push_back( values[0] );
+                        
                     }else{
-                        defaultValues.push_back( 0 );
+                        
+                        //if nameValue[0] is no a digit, it's a custom propriety
+                        cout << "Not channel : " << nameValue[0]  << " on "  << defName << std::endl;
+                        propsDef[ nameValue[0] ] = nameValue[1];
                     }
                     
-                    chanelDef[ values[0] ] = stoi( nameValue[0] );
-                    
-                    std::cout << "----" << values[0] << std::endl;
-                    
-                    channelsNames.push_back( values[0] );
+
                 }
                 
                 
                 def->addMode(chanelDef);
                 def->setChannelNames( channelsNames );
                 def->setDefaultValue( defaultValues );
+                def->setCustomPropreties(propsDef);
             }
             
             return def;

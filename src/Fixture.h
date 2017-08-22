@@ -39,7 +39,6 @@ namespace openfixture {
             return &(*globalDefinitions[name_]);
         }
         
-        
         static Definition* getDefinitionByName(const std::string& name_ ){
             
             return &(*globalDefinitions[name_]);
@@ -54,17 +53,25 @@ namespace openfixture {
             defaultValues.push_back( value );
         }
         
-        std::vector< Fixture* > getFixtures(){
+        std::vector< Fixture* > getFixtures() const {
             return mFixtures;
         };
         
         
-        std::vector< std::string > getChannelNames(int mode) {
+        std::vector< std::string > getChannelNames(int mode) const {
             return names[mode];
         }
         
         void setChannelNames(const std::vector<std::string> & value){
             names.push_back( value );
+        }
+        
+        void setCustomPropreties(const std::map<std::string, std::string> & value){
+            customPropreties = value;
+        }
+        
+        std::map<std::string, std::string> getCustomPropreties() const {
+            return customPropreties;
         }
         
         
@@ -84,6 +91,7 @@ namespace openfixture {
         std::vector< std::vector< std::string > > names;
         
         std::vector< std::vector<int> > defaultValues;
+        std::map<std::string, std::string> customPropreties;
         
         
         std::vector< Fixture* > mFixtures;
