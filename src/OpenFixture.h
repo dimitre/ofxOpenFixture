@@ -30,13 +30,25 @@ namespace openfixture {
                 
                 r.erase(r.begin());
                 std::map<std::string, int> chanelDef;
+                std::vector<int> defaultValues;
                 
                 for( auto rr : r ){
                     auto nameValue = split( rr, '=' );
-                    chanelDef[ nameValue[1] ] = stoi( nameValue[0] );
+                    
+                    auto values = split( nameValue[1], ',' );
+                    
+                    if( values.size() > 1 ){
+                        cout << "Has default value" << values[1] << std::endl;
+                        defaultValues.push_back( stoi( values[1] ) );
+                    }else{
+                        defaultValues.push_back( 0 );
+                    }
+                    
+                    chanelDef[ values[0] ] = stoi( nameValue[0] );
                 }
                 
                 def->addMode(chanelDef);
+                def->setDefaultValue( defaultValues );
             }
             
             return def;
@@ -66,8 +78,8 @@ namespace openfixture {
                 mFix->setMode(0);
 				
 				// Dimitre inseriu
-				mFix->customProp["model"] = name;
-				//cout << name << endl;
+                std::vector<std::string> propValues{ name };
+                mFix->customProp["model"] = propValues;
 
 				
                 int channel = -1;
@@ -87,7 +99,17 @@ namespace openfixture {
                         mFix->setMode(value);
                         
                     }else{
-                        mFix->customProp[nameValue[0]] = nameValue[1];
+
+                        cout << "prop name: " << nameValue[0] << std::endl;
+                        cout << "prop value: " << nameValue[1] << std::endl;
+                        
+                        auto values = split(nameValue[1], ',');
+                        
+                        for(auto v: values){
+                            cout << ".." << v << std::endl;
+                        }
+                        
+                        mFix->customProp[nameValue[0]] = values;
                     }
                     
                 }
@@ -120,9 +142,13 @@ namespace openfixture {
                 
                 if( fix->customProp.find( name ) != fix->customProp.end() ){
                     
-                    if( fix->customProp[name] == value){
+                    
+                    auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), value );
+                    
+                    if( exists != fix->customProp[name].end() ){
                         result.push_back( fix );
                     }
+                    
                 }
             }
 
@@ -138,7 +164,10 @@ namespace openfixture {
 
                 if( fix->customProp.find( name ) != fix->customProp.end() ){
                     
-                    result[ fix->customProp[name]].push_back(fix);
+                    for( auto& v : fix->customProp[name] ){
+                        
+                        result[v].push_back( fix );
+                    }
                     
                 }
             }
@@ -157,12 +186,6 @@ namespace openfixture {
             return result;
         }
 
-        
-//		std::vector< ofix::Definition* > getDefinitions(){
-//			
-//			return Definitions::
-//			
-//		}
         std::vector< ofix::Universe* > getUniverses(){
             
             std::vector< ofix::Universe* > result;

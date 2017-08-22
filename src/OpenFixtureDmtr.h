@@ -76,7 +76,9 @@ namespace openfixture{
     }
     
    inline std::vector <std::vector <std::string>> loadScheme(std::string file_path) {
-        std::vector <std::vector< std::string>> saida;
+       
+       
+        std::vector <std::vector< std::string >> saida;
         
         std::ifstream file( file_path );
         
@@ -117,6 +119,9 @@ namespace openfixture{
                 }else{
                     
                     // TODO: split in ','
+                    
+                    
+                    
                     saida[currentIndex].push_back(s);
                 }
             }

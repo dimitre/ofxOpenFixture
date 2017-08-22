@@ -46,8 +46,12 @@ namespace openfixture {
         }
         
         
-        void addMode(const std::map<std::string, int> mode){
+        void addMode(const std::map<std::string, int>& mode){
             modes.push_back( mode );
+        }
+        
+        void setDefaultValue(const std::vector<int> & value){
+            defaultValues.push_back( value );
         }
         
         std::vector< Fixture* > getFixtures(){
@@ -65,7 +69,11 @@ namespace openfixture {
         uint16_t getMaxChannels(Fixture* fixture);
         
         
+        // Channels definition and default values
         std::vector< std::map<std::string, int>> modes;
+        std::vector< std::vector<int> > defaultValues;
+        
+        
         std::vector< Fixture* > mFixtures;
         std::string name;
     };
@@ -81,6 +89,10 @@ namespace openfixture {
         }
         
         Fixture( Definition* def ) : mDefPtr(def){
+            
+            fixId = fixtureCount;
+            fixtureCount +=1 ;
+            
             mChannels.resize( mDefPtr->getMaxChannels(this) );
             def->mFixtures.push_back( this );
         }
@@ -93,7 +105,7 @@ namespace openfixture {
         void setChannelByName(const std::string& name, uint8_t value );
         int getChannelValueByName(const std::string& name);
         
-        void setMode(int m ){
+        void setMode(int m , bool resetToDefault = true){
             
             if( m >= mDefPtr->modes.size() ){
                 std::cout << "error, no mode " << m << "in definition " << mDefPtr->name << std::endl;
@@ -101,6 +113,14 @@ namespace openfixture {
             
             mode = m;
             mChannels.resize(mDefPtr->getMaxChannels(this));
+            
+            
+            if( resetToDefault == true ){
+                
+                for(int i = 0; i < mChannels.size(); i++ ){
+                    mChannels[i] = mDefPtr->defaultValues[mode][i];
+                }
+            }
         }
     
         uint16_t getMaxChannels(){
@@ -134,20 +154,28 @@ namespace openfixture {
         uint8_t& operator[](int i) {
             return mChannels[i];
         }
+        
+        
+        int getId(){
+            return fixId;
+        }
 
         friend class Definition;
 
-        std::map<std::string, std::string> customProp;
+        // one key can have multiple values, eg: "group=stage,lowerLeft,back"
+        std::map<std::string, std::vector<std::string> > customProp;
         
     protected:
         
         int mode = 0;
         
+        static int fixtureCount;
+        int fixId = -1;
+        
         std::vector<uint8_t> mChannels;
         Definition* mDefPtr;
         
     };
-    
     
     
     class Universe{
@@ -184,7 +212,6 @@ namespace openfixture {
                 fixAdd.second->setBuffer( &data[ fixAdd.first ] );
             }
             return data;
-            
         }
         
         // checks if it's ok to add a fixture to the end of the buffer
