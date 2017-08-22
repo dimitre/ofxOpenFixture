@@ -47,6 +47,10 @@ namespace openfixture {
                     }
                     
                     chanelDef[ values[0] ] = stoi( nameValue[0] );
+                    
+                    std::cout << "----" << values[0] << std::endl;
+                    
+                    channelsNames.push_back( values[0] );
                 }
                 
                 
