@@ -30,15 +30,17 @@ namespace openfixture {
                 
                 r.erase(r.begin());
                 std::map<std::string, int> chanelDef;
+                
+                std::vector<std::string> channelsNames;
                 std::vector<int> defaultValues;
                 
                 for( auto rr : r ){
+                    
                     auto nameValue = split( rr, '=' );
                     
                     auto values = split( nameValue[1], ',' );
                     
                     if( values.size() > 1 ){
-                        cout << "Has default value" << values[1] << std::endl;
                         defaultValues.push_back( stoi( values[1] ) );
                     }else{
                         defaultValues.push_back( 0 );
@@ -47,7 +49,9 @@ namespace openfixture {
                     chanelDef[ values[0] ] = stoi( nameValue[0] );
                 }
                 
+                
                 def->addMode(chanelDef);
+                def->setChannelNames( channelsNames );
                 def->setDefaultValue( defaultValues );
             }
             
@@ -63,9 +67,6 @@ namespace openfixture {
                 
                 fix.erase(fix.begin());
 
-				
-
-				
                 auto defGlobal = ofix::Definition::getDefinitionByName( name );
                 
                 if( defGlobal == nullptr){
@@ -100,14 +101,10 @@ namespace openfixture {
                         
                     }else{
 
-                        cout << "prop name: " << nameValue[0] << std::endl;
-                        cout << "prop value: " << nameValue[1] << std::endl;
+//                        cout << "prop name: " << nameValue[0] << std::endl;
+//                        cout << "prop value: " << nameValue[1] << std::endl;
                         
                         auto values = split(nameValue[1], ',');
-                        
-                        for(auto v: values){
-                            cout << ".." << v << std::endl;
-                        }
                         
                         mFix->customProp[nameValue[0]] = values;
                     }
