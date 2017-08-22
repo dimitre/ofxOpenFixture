@@ -58,6 +58,17 @@ namespace openfixture {
             return mFixtures;
         };
         
+        std::vector< std::string > getChannelNames(int mode) {
+            
+            std::vector< std::string > names;
+            
+            for(auto channels : modes[mode] ){
+                names.push_back( channels.first );
+            }
+            
+            return names;
+        }
+        
         
         friend Fixture;
     private:
@@ -69,7 +80,7 @@ namespace openfixture {
         uint16_t getMaxChannels(Fixture* fixture);
         
         
-        // Channels definition and default values
+        // Channels definitions and default values
         std::vector< std::map<std::string, int>> modes;
         std::vector< std::vector<int> > defaultValues;
         
@@ -104,6 +115,10 @@ namespace openfixture {
         
         void setChannelByName(const std::string& name, uint8_t value );
         int getChannelValueByName(const std::string& name);
+        
+        std::vector< std::string > getChannelNames() {
+            return  mDefPtr->getChannelNames(mode);
+        }
         
         void setMode(int m , bool resetToDefault = true){
             

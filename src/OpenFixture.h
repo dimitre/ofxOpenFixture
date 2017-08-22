@@ -185,6 +185,11 @@ namespace openfixture {
             
             return result;
         }
+        
+        
+        Definition* getDefinitionByName( std::string name ){
+            return Definition::getDefinitionByName(name);
+        }
 
         std::vector< ofix::Universe* > getUniverses(){
             
