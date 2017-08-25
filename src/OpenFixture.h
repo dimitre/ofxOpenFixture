@@ -33,14 +33,16 @@ namespace openfixture {
                 r.erase(r.begin());
                 
                 std::map<std::string, int> chanelDef;
-                std::map<std::string, std::string> propsDef;
+                std::vector<int> blackoutMask;
+                std::map<std::string, std::vector<std::string>> propsDef;
+                
                 
                 std::vector<std::string> channelsNames;
                 std::vector<int> defaultValues;
                 
                 for( auto rr : r ){
                     
-                    cout << "rr: " << rr << std::endl;
+//                    cout << "rr: " << rr << std::endl;
                     
                     auto nameValue = split( rr, '=' );
                     
@@ -62,11 +64,27 @@ namespace openfixture {
                         chanelDef[ values[0] ] = stoi( nameValue[0] );
                         channelsNames.push_back( values[0] );
                         
-                    }else{
+                    }else if( nameValue[0] == "blackout" ){
                         
-                        //if nameValue[0] is no a digit, it's a custom propriety
-                        cout << "Not channel : " << nameValue[0]  << " on "  << defName << std::endl;
-                        propsDef[ nameValue[0] ] = nameValue[1];
+                        
+                        auto values = split( nameValue[1], ',' );
+                        
+                        
+                        
+                        for(auto& v : values){
+                            
+                            if( isInteger( v ) ){
+                                blackoutMask.push_back( stoi(v) );
+                            }
+                            
+                        }
+                        
+                        
+
+                    }else{
+                        //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
+                        auto values = split( nameValue[1], ',' );
+                        propsDef[ nameValue[0] ] = values;
                     }
                     
 
@@ -77,6 +95,7 @@ namespace openfixture {
                 def->setChannelNames( channelsNames );
                 def->setDefaultValue( defaultValues );
                 def->setCustomPropreties(propsDef);
+                def->setBlackoutMask(blackoutMask);
             }
             
             return def;
@@ -186,17 +205,24 @@ namespace openfixture {
                 if( fix->customProp.find( name ) != fix->customProp.end() ){
                     
                     for( auto& v : fix->customProp[name] ){
-                        
                         result[v].push_back( fix );
                     }
-                    
                 }
             }
             return result;
         }
         
         
-        
+        FixtureRef getFixtureById( int id_ ){
+            
+            for(int i = 0; i < mFixtures.size(); i++){
+                if( mFixtures[i]->getId() == id_ ){
+                    return mFixtures[i];
+                }
+            }
+            
+            return nullptr;
+        }
         
         //
         std::vector< ofix::FixtureRef > getFixturesWithDefinitionName( std::string name ){

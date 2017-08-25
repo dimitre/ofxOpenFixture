@@ -44,7 +44,6 @@ namespace openfixture {
             return &(*globalDefinitions[name_]);
         }
         
-        
         void addMode(const std::map<std::string, int>& mode){
             modes.push_back( mode );
         }
@@ -66,12 +65,35 @@ namespace openfixture {
             names.push_back( value );
         }
         
-        void setCustomPropreties(const std::map<std::string, std::string> & value){
+        void setCustomPropreties(const std::map<std::string, std::vector<std::string>> & value){
             customPropreties = value;
         }
         
-        std::map<std::string, std::string> getCustomPropreties() const {
+        std::map<std::string, std::vector<std::string>> getCustomPropreties() const {
             return customPropreties;
+        }
+        
+        std::vector<std::string> getPropretieValues(const std::string& propName ){
+            return customPropreties[propName];
+        }
+        
+        bool hasCustomPropretie( const std::string& propName  ){
+            
+            if( customPropreties.find( propName ) != customPropreties.end() ){
+                return true;
+            }else{
+                return false;
+            }
+            
+        }
+        
+        void setBlackoutMask( std::vector<int>& mask ){
+            
+            mBlackoutMask = mask;
+        }
+        
+        std::vector<int> getBlackoutMask(){
+            return mBlackoutMask;
         }
         
         
@@ -91,8 +113,12 @@ namespace openfixture {
         std::vector< std::vector< std::string > > names;
         
         std::vector< std::vector<int> > defaultValues;
-        std::map<std::string, std::string> customPropreties;
         
+        // todo: make this a class or method
+        std::map<std::string, std::vector<std::string>> customPropreties;
+        
+        std::vector<int> mBlackoutMask;
+
         
         std::vector< Fixture* > mFixtures;
         std::string name;
@@ -140,9 +166,13 @@ namespace openfixture {
             
             
             if( resetToDefault == true ){
+               
+                setBlackoutMask( mDefPtr->getBlackoutMask() );
+
                 
                 for(int i = 0; i < mChannels.size(); i++ ){
-                    mChannels[i] = mDefPtr->defaultValues[mode][i];
+                    auto defaultv = mDefPtr->defaultValues[mode][i];
+                    mChannels[i] = defaultv;
                 }
             }
         }
@@ -157,32 +187,87 @@ namespace openfixture {
         }
         
         
-        void setBuffer( uint8_t* data ){
+        void setExternalBuffer( uint8_t* dataOutput ){
             
             for( int i = 0; i < mChannels.size(); i++ ){
                 
-                *data = mChannels[i];
-                data++;
+                *dataOutput = getChannel(i);
+                dataOutput++;
+            }
+        }
+        
+        
+        uint8_t getChannel(int channel) const{
+            
+            if( mIsBlackout && mBlackoutMask.size() == 0 ){
+                return 0;
+            }
+            
+            
+            if( mIsBlackout ){
+                
+                if( std::find(mBlackoutMask.begin(), mBlackoutMask.end(), channel) != mBlackoutMask.end() ){
+                    
+                    return 0;
+                    
+                }else{
+                
+                    return mChannels[channel];
+                }
+            }
+           
+            return mChannels[channel];
+        }
+        
+    
+        std::vector<uint8_t> getChannels(){
+    
+            return mChannels;
+        }
+        
+        void setChannels(const std::vector<uint8_t>& channels_ ){
+            
+            if( mChannels.size() != channels_.size()  ){
+                std::cout << "error, setting channel array with wrong size array" << std::endl;
+            }else{
+                mChannels = channels_;
             }
             
         }
         
-        //
-        uint8_t getChannel(int channel){
-            return mChannels[channel];
-        }
-        
         const int operator[](int i) const {
-            return mChannels[i];
+            return getChannel(i);
         }
         uint8_t& operator[](int i) {
             return mChannels[i];
         }
         
         
+        void setBlackoutMask(const std::vector<int>& mask ){
+            
+            mBlackoutMask = mask;
+        }
+        
+        std::vector<int> getBlackoutMask(){
+            return mBlackoutMask;
+        }
+        
+        void enableBlackout( bool b ){
+            mIsBlackout = b;
+        }
+        
+        bool isOnBlackout(){
+            return mIsBlackout;
+        }
+        
         int getId(){
             return fixId;
         }
+
+        Definition* getDefinitionPtr(){
+            return mDefPtr;
+        }
+        
 
         friend class Definition;
 
@@ -197,6 +282,10 @@ namespace openfixture {
         int fixId = -1;
         
         std::vector<uint8_t> mChannels;
+        
+        bool mIsBlackout = false;
+        std::vector<int> mBlackoutMask;
+        
         Definition* mDefPtr;
         
     };
@@ -233,7 +322,7 @@ namespace openfixture {
             memset(&data[0], 0, 512);
             
             for( auto& fixAdd : fixturesMap ) {
-                fixAdd.second->setBuffer( &data[ fixAdd.first ] );
+                fixAdd.second->setExternalBuffer( &data[ fixAdd.first ] );
             }
             return data;
         }
@@ -249,7 +338,6 @@ namespace openfixture {
         }
         
         std::vector<FixtureRef> getFixtures(){
-            
             
             std::vector<FixtureRef> fixtures;
             

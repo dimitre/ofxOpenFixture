@@ -56,18 +56,16 @@ public:
     
     
     void loadUniversesDefFromFolder( std::string folder_path = "_universes/"  ){
-    
         
         ofDirectory dir;
         dir.open( folder_path );
-        
         
         for( int i = 0; i < dir.listDir(); i++  ){
             
             mOfix.createUniverseFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
         }
-        
     }
+
     
     ofix::OpenFixture& operator()(){
         
@@ -77,6 +75,7 @@ public:
     
     std::string myComputerIp = "192.168.0.1";
     ofix::OpenFixture mOfix;
+    
 };
 
 
