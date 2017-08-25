@@ -41,9 +41,27 @@ namespace openfixture {
         
         static Definition* getDefinitionByName(const std::string& name_ ){
             
-            return &(*globalDefinitions[name_]);
+            if( globalDefinitions.find(name_) != globalDefinitions.end() ){
+                return &(*globalDefinitions[name_]);
+            }else{
+                return nullptr;
+            }
+            
         }
         
+        static std::vector< Definition* > getDefinitions(){
+            
+            std::vector< Definition* > result;
+            
+            for( auto& def :  globalDefinitions ){
+                
+                result.push_back( &(*def.second) );
+            }
+            return result;
+        }
+        
+        
+        //======
         void addMode(const std::map<std::string, int>& mode){
             modes.push_back( mode );
         }
@@ -59,6 +77,27 @@ namespace openfixture {
         
         std::vector< std::string > getChannelNames(int mode) const {
             return names[mode];
+        }
+        
+        int getChannelIndexByName(const std::string& name, int mode = 0 ){
+            
+            if(  modes[mode].find(name) != modes[mode].end() ){
+                return modes[mode][name];
+            }else{
+                return -1;
+            }
+        }
+        
+        std::string getChannelNameByIndex( int index, int mode ){
+
+            for( auto c : modes[mode] ){
+                
+                if( c.second == index ){
+                    return c.first;
+                }
+            }
+            
+            return "";
         }
         
         void setChannelNames(const std::vector<std::string> & value){
@@ -94,6 +133,14 @@ namespace openfixture {
         
         std::vector<int> getBlackoutMask(){
             return mBlackoutMask;
+        }
+        
+        std::string getModelName(){
+            return name;
+        }
+        
+        void setModelName(std::string name_){
+            name = name_;
         }
         
         

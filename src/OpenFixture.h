@@ -42,17 +42,10 @@ namespace openfixture {
                 
                 for( auto rr : r ){
                     
-//                    cout << "rr: " << rr << std::endl;
-                    
                     auto nameValue = split( rr, '=' );
-                    
 
-                    
-                    
                     if(  isInteger( nameValue[0] ) ){
                         // add a channel definitiion
-                    
-                        
                         auto values = split( nameValue[1], ',' );
                         
                         if( values.size() > 1 ){
@@ -117,6 +110,8 @@ namespace openfixture {
                     std::cout << "error no definition name: " << name << std::endl;
                     continue;
                 }
+                
+                std::cout << "ok..." << name << std::endl;
                 
                 auto mFix =  ofix::Fixture::create( defGlobal );
                 mFix->setMode(0);
@@ -237,7 +232,27 @@ namespace openfixture {
         Definition* getDefinitionByName( std::string name ){
             return Definition::getDefinitionByName(name);
         }
+        
+        
+        std::vector< ofix::Definition* > getDefinitionsWithProperties( std::string name ){
+            
+            std::vector< ofix::Definition*> result;
+            
+            auto definitions = Definition::getDefinitions() ;
+            
+            for(auto& def  :  definitions){
+                
+                if( def->hasCustomPropretie( name )  ){
+                    result.push_back( def );
+                }
+                
+            }
 
+            return result;
+        }
+        
+        
+        
         std::vector< ofix::Universe* > getUniverses(){
             
             std::vector< ofix::Universe* > result;
@@ -256,6 +271,14 @@ namespace openfixture {
             return &(*mUniverses[name]);
         }
         
+        
+        void setChannelInGroup( int channel, int value, std::string groupName, std::string groupTag = "group" ){
+            
+            for( auto& fix : getFixturesWithPropertiesValue(groupTag, groupName)){
+                fix->setChannel(channel, value);
+            }
+
+        }
         
         
     private:
