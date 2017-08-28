@@ -18,7 +18,7 @@ namespace openfixture {
         
         if ( modes[mode].find(name) == modes[mode].end() ) {
             
-            std::cout << "no chanel with name: " << name << std::endl;
+            std::cout << "no channel with name: " << name << std::endl;
             return -1;
         } else {
             return modes[mode][name];

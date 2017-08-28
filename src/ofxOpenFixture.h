@@ -33,23 +33,15 @@ inline void renderUniverse(ofImage* image, ofix::Universe& uni, int columns = 20
 class ofxOpenFixture{
 public:
     ofxOpenFixture(){
-        
-        
     }
     
     void loadFixturesDefFromFolder( std::string folder_path = "_fixtures/" ){
-        
         ofDirectory dir;
         dir.open( folder_path );
-        
-        
         for( int i = 0; i < dir.listDir(); i++  ){
-            
-            cout << dir.getPath(i) << std::endl;
-            
+            //cout << dir.getPath(i) << std::endl;
             mOfix.createDefinitionFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
-
-            
+			
         }
         
     }

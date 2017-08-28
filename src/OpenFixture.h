@@ -111,7 +111,7 @@ namespace openfixture {
                     continue;
                 }
                 
-                std::cout << "ok..." << name << std::endl;
+                //std::cout << "ok..." << name << std::endl;
                 
                 auto mFix =  ofix::Fixture::create( defGlobal );
                 mFix->setMode(0);
@@ -189,10 +189,25 @@ namespace openfixture {
 
             return result;
         }
-        
-        
+		
+		
+		/// DIMITRE
+		void setFixturesChannelByModel(string modelName, string channelName, int val) {
+			for(auto & fix : mFixtures){
+				string name = "model";
+				if( fix->customProp.find( name ) != fix->customProp.end() ){
+					auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), modelName );
+					if( exists != fix->customProp[name].end() ){
+						fix->setChannelByName(channelName, val);
+					}
+					
+				}
+			}
+		}
+		
+		
         std::map< std::string, std::vector< ofix::FixtureRef > > getFixturesWithProperties( std::string name ){
-            
+			
             std::map< std::string, std::vector< ofix::FixtureRef > >  result;
             
             for(auto& fix : mFixtures){
