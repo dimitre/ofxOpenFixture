@@ -229,6 +229,26 @@ namespace openfixture {
 			return result;
 		}
 		
+		// DIMITRE
+		vector <string> getFixtureNamesWithPropertiesValue(string name, string value) {
+			cout << "===== BEGIN" << endl;
+			vector <string> result;
+			for(auto& fix : mFixtures){
+				//cout << fix->getDefinitionPtr()->getModelName() << endl;;
+				if( fix->customProp.find( name ) != fix->customProp.end() ){
+					auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), value );
+					if( exists != fix->customProp[name].end() ){
+						string c = fix->getDefinitionPtr()->getModelName();
+						//if (c != value && std::find( result.begin(), result.end(), c) == result.end())
+						{
+							result.push_back(c);
+						}
+					}
+				}
+			}
+			return result;
+		}
+		
 		
         std::map< std::string, std::vector< ofix::FixtureRef > > getFixturesWithProperties( std::string name ){
 			
