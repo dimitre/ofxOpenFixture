@@ -14,62 +14,116 @@
 #include "OpenFixtureDmtr.h"
 #include "OpenFixture.h"
 
+#include "ofxJSON.h"
 
+namespace openfixture{
     
-inline void renderUniverse(ofImage* image, ofix::Universe& uni, int columns = 20) {
     
-    auto dmxDatas = uni.getBuffer();
-    
-    for (int a=0; a<512; a++) {
-        int x = a % columns;
-        int y = a / columns;
+    inline Definition* createDefinitionFromJson(const std::string& json_string ){
         
-        image->setColor(x ,y  , ofColor((int)dmxDatas[a]));
-    }
-    image->update();
-}
-    
-    
-class ofxOpenFixture{
-public:
-    ofxOpenFixture(){
-    }
-    
-    void loadFixturesDefFromFolder( std::string folder_path = "_fixtures/" ){
-        ofDirectory dir;
-        dir.open( folder_path );
-        for( int i = 0; i < dir.listDir(); i++  ){
-            //cout << dir.getPath(i) << std::endl;
-            mOfix.createDefinitionFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
-			
-        }
+        ofxJSON jsonobj( json_string );
         
-    }
-    
-    
-    void loadUniversesDefFromFolder( std::string folder_path = "_universes/"  ){
+        std::string defNameFiltered = filterString(jsonobj["shortName"].asString());
         
-        ofDirectory dir;
-        dir.open( folder_path );
+        auto def = Definition::createDefinition( defNameFiltered );
         
-        for( int i = 0; i < dir.listDir(); i++  ){
+        
+        for( const auto& j : jsonobj["modes"] ){
             
-            mOfix.createUniverseFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
+            std::map<string, int> channelDef;
+            std::vector<std::string> channelsNames;
+            
+            int channelIndex = 0;
+            
+            int index = 0;
+            for( const auto& channelName : j["channels"]){
+                
+                std::string channelNameFiltered = filterString(channelName.asString());
+                channelsNames.push_back(channelNameFiltered );
+                channelDef[channelNameFiltered] = index;
+                index++;
+            }
+            
+            def->addMode( channelDef );
+            def->setChannelNames(channelsNames );
         }
+        return def;
     }
-
     
-    ofix::OpenFixture& operator()(){
+    
+    inline void renderUniverse(ofImage* image, ofix::Universe& uni, int columns = 20) {
         
-        return mOfix;
+        auto dmxDatas = uni.getBuffer();
+        
+        for (int a=0; a<512; a++) {
+            int x = a % columns;
+            int y = a / columns;
+            
+            image->setColor(x ,y  , ofColor((int)dmxDatas[a]));
+        }
+        image->update();
     }
-    
-    
-    std::string myComputerIp = "192.168.0.1";
-    ofix::OpenFixture mOfix;
-    
-};
+        
+        
+    class ofxOpenFixture{
+    public:
+        ofxOpenFixture(){
+        }
+        
+        void loadFixturesDefFromFolder( std::string folder_path = "_fixtures/" ){
+            ofDirectory dir;
+            dir.open( folder_path );
+            for( int i = 0; i < dir.listDir(); i++  ){
+                
+                ofFile file = dir.getFile(i);
+                
+                cout << file.getExtension()  << std::endl;
+                
+                if( file.getExtension() == "txt" ){
+                    mOfix.createDefinitionFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
+                }
+                
+                
+                else if( file.getExtension() == "json" ){
+                    
+                    createDefinitionFromJson( ofBufferFromFile( dir.getPath(i) ).getText() ) ;
+                    
+                }
+                
+                
+                
+            }
+            
+        }
+        
+        
+        void loadUniversesDefFromFolder( std::string folder_path = "_universes/"  ){
+            
+            ofDirectory dir;
+            dir.open( folder_path );
+            
+            for( int i = 0; i < dir.listDir(); i++  ){
+                
+                mOfix.createUniverseFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
+            }
+        }
 
 
+        
+        ofix::OpenFixture& operator()(){
+            
+            return mOfix;
+        }
+        
+        
+        std::string myComputerIp = "192.168.0.1";
+        ofix::OpenFixture mOfix;
+        
+        
+        
+    };
+
+
+}
 
 #endif /* ofxOpenFixture_h */

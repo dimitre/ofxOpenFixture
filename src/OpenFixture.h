@@ -19,18 +19,24 @@ namespace openfixture {
     
     class OpenFixture{
         
+        class Scheme{
+            
+            
+            
+        };
+        
         public:
         
-        ofix::Definition* createDefinitionFromScheme(const std::vector< std::vector<std::string>>& s ){
+        ofix::Definition* createDefinitionFromScheme(const std::vector< std::vector<std::string>>& schema ){
             
             ofix::Definition* def = nullptr;
-            for(auto r :  s){
+            for(auto defString :  schema){
                 
-                std::string defName = r[0];
+                std::string defName = defString[0];
                 
                 def = ofix::Definition::createDefinition(defName);
 
-                r.erase(r.begin());
+                defString.erase(defString.begin());
                 
                 std::map<std::string, int> chanelDef;
                 std::vector<int> blackoutMask;
@@ -40,9 +46,9 @@ namespace openfixture {
                 std::vector<std::string> channelsNames;
                 std::vector<int> defaultValues;
                 
-                for( auto rr : r ){
+                for( auto channelString : defString ){
                     
-                    auto nameValue = split( rr, '=' );
+                    auto nameValue = split( channelString, '=' );
 
                     if(  isInteger( nameValue[0] ) ){
                         // add a channel definitiion
@@ -72,8 +78,6 @@ namespace openfixture {
                             
                         }
                         
-                        
-
                     }else{
                         //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
                         auto values = split( nameValue[1], ',' );
@@ -82,7 +86,6 @@ namespace openfixture {
                     
 
                 }
-                
                 
                 def->addMode(chanelDef);
                 def->setChannelNames( channelsNames );
@@ -100,6 +103,8 @@ namespace openfixture {
             for(auto fix : scheme){
                 
                 std::string name = fix[0];
+                
+                std::cout << name << std::endl;
                 
                 fix.erase(fix.begin());
 
@@ -166,6 +171,7 @@ namespace openfixture {
 
             return &(*uni);
         }
+        
         
         
         //

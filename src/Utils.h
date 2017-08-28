@@ -47,7 +47,7 @@ namespace openfixture {
         
         std::string result = input;
         
-        std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+        //std::transform(result.begin(), result.end(), result.begin(), ::tolower);
         result.erase(remove_if(result.begin(), result.end(), ::isspace ), result.end());
         result.erase(std::remove(result.begin(), result.end(), '\t'), result.end());
    

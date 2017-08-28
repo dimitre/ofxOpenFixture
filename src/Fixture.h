@@ -217,11 +217,17 @@ namespace openfixture {
                 setBlackoutMask( mDefPtr->getBlackoutMask() );
 
                 
-                for(int i = 0; i < mChannels.size(); i++ ){
-                    auto defaultv = mDefPtr->defaultValues[mode][i];
-                    mChannels[i] = defaultv;
+                if( mDefPtr->defaultValues.size() > 0 ){
+                    for(int i = 0; i < mChannels.size(); i++ ){
+                        auto defaultv = mDefPtr->defaultValues[mode][i];
+                        mChannels[i] = defaultv;
+                    }
                 }
             }
+        }
+        
+        int getMode(){
+            return mode;
         }
     
         uint16_t getMaxChannels(){
