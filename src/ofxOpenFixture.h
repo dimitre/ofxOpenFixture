@@ -85,13 +85,8 @@ namespace openfixture{
                 
                 
                 else if( file.getExtension() == "json" ){
-                    
                     createDefinitionFromJson( ofBufferFromFile( dir.getPath(i) ).getText() ) ;
-                    
                 }
-                
-                
-                
             }
             
         }

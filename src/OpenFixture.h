@@ -135,7 +135,7 @@ namespace openfixture {
                     std::string name = nameValue[0];
                     
                     if( nameValue[0] == "channel" ){
-                        int value = stoi( nameValue[1] );
+                        int value = stoi( nameValue[1] ) - 1;
                         channel = value;
                     }else if( nameValue[0] == "mode" ){
                         
@@ -204,12 +204,21 @@ namespace openfixture {
 				if( fix->customProp.find( name ) != fix->customProp.end() ){
 					auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), modelName );
 					if( exists != fix->customProp[name].end() ){
+                        
+                        
 						fix->setChannelByName(channelName, val);
 					}
 				}
 			}
 		}
 		
+        void setFixturesChannelByModelId( string modelName, int id_,  int val ){
+            
+            
+            
+            
+        }
+        
 		
 		// DIMITRE
 		vector <string> getPropertiesWithPropertiesValue(string name, string value) {
@@ -310,7 +319,7 @@ namespace openfixture {
             return result;
         }
         
-        
+
         
         std::vector< ofix::Universe* > getUniverses(){
             

@@ -188,6 +188,8 @@ namespace openfixture {
             
             mChannels.resize( mDefPtr->getMaxChannels(this) );
             def->mFixtures.push_back( this );
+            
+            modelId = def->mFixtures.size();
         }
         
         static FixtureRef create( Definition* def ){
@@ -316,6 +318,10 @@ namespace openfixture {
         int getId(){
             return fixId;
         }
+        
+        int getModelId(){
+            return modelId;
+        }
 
         Definition* getDefinitionPtr(){
             return mDefPtr;
@@ -333,6 +339,8 @@ namespace openfixture {
         
         static int fixtureCount;
         int fixId = -1;
+        
+        int modelId = -1;
         
         std::vector<uint8_t> mChannels;
         
@@ -364,7 +372,7 @@ namespace openfixture {
         void appendFixture( FixtureRef fix ){
             
             fixturesMap[ lastAvailableChannel ] = fix;
-            lastAvailableChannel += fix->getMaxChannels();
+            lastAvailableChannel += ( fix->getMaxChannels() + 1) ;
 
         }
         
