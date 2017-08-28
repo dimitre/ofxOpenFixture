@@ -191,7 +191,7 @@ namespace openfixture {
         }
 		
 		
-		/// DIMITRE
+		// DIMITRE
 		void setFixturesChannelByModel(string modelName, string channelName, int val) {
 			for(auto & fix : mFixtures){
 				string name = "model";
@@ -200,9 +200,27 @@ namespace openfixture {
 					if( exists != fix->customProp[name].end() ){
 						fix->setChannelByName(channelName, val);
 					}
-					
 				}
 			}
+		}
+		
+		
+		// DIMITRE
+		vector <string> getPropertiesWithPropertiesValue(string name, string value) {
+			vector <string> result;
+			for(auto& fix : mFixtures){
+				if( fix->customProp.find( name ) != fix->customProp.end() ){
+					auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), value );
+					if( exists != fix->customProp[name].end() ){
+						for (auto & c : fix->customProp[name]) {
+							if (c != value && std::find( result.begin(), result.end(), c) == result.end()) {
+								result.push_back(c);
+							}
+						}
+					}
+				}
+			}
+			return result;
 		}
 		
 		
