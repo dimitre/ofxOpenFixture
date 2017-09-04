@@ -104,7 +104,7 @@ namespace openfixture {
                 
                 std::string name = fix[0];
                 
-                std::cout << name << std::endl;
+                //std::cout << name << std::endl;
                 
                 fix.erase(fix.begin());
 
@@ -219,6 +219,23 @@ namespace openfixture {
             
         }
         
+		
+		// DIMITRE, experimental - 04/09/2017
+		// Funciona mas isso pode ser um lookup table. ponteiros ou algo.
+		// os cruzamentos ja sao computados no carregar do software.
+		int getNumFixturesByModel(string model) {
+			int count = 0;
+			for(auto& fix : mFixtures){
+				string name = "model";
+				if( fix->customProp.find( name ) != fix->customProp.end() ){
+					auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), model );
+					if( exists != fix->customProp[name].end() ){
+						count ++;
+					}
+				}
+			}
+			return count;
+		}
 		
 		// DIMITRE
 		vector <string> getPropertiesWithPropertiesValue(string name, string value) {

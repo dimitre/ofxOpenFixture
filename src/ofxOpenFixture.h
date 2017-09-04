@@ -77,7 +77,7 @@ namespace openfixture{
                 
                 ofFile file = dir.getFile(i);
                 
-                cout << file.getExtension()  << std::endl;
+                //cout << file.getExtension()  << std::endl;
                 
                 if( file.getExtension() == "txt" ){
                     mOfix.createDefinitionFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
