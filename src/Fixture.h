@@ -189,7 +189,7 @@ namespace openfixture {
             mChannels.resize( mDefPtr->getMaxChannels(this) );
             def->mFixtures.push_back( this );
             
-            modelId = def->mFixtures.size();
+            modelId = def->mFixtures.size() - 1;
         }
         
         static FixtureRef create( Definition* def ){
