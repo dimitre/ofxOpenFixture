@@ -38,7 +38,8 @@ namespace openfixture {
     
     // Fixtures --------
     int Fixture::fixtureCount = 0;
-    
+	float Fixture::masterFade = 1.0f;
+
     void Fixture::setChannelByName(const std::string& name, uint8_t value){
         
         int channel = mDefPtr->getChannelByName(this, name);

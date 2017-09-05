@@ -40,6 +40,7 @@ namespace openfixture {
                 
                 std::map<std::string, int> chanelDef;
                 std::vector<int> blackoutMask;
+				bool dimmerExists = false;
                 std::map<std::string, std::vector<std::string>> propsDef;
                 
                 
@@ -54,16 +55,13 @@ namespace openfixture {
                     if(  isInteger( nameValue[0] ) ){
                         // add a channel definitiion
                         auto values = split( nameValue[1], ',' );
-                        
-                        
+\
                         if( values.size() > 1 ){
-                            
                             // set a default value
                             int v = stoi( values[1] );
                             defaultValues.push_back( v );
                             
                         }else{
-                            
                             //if there is no default value, set it to 0
                             defaultValues.push_back( 0 );
                         }
@@ -78,25 +76,33 @@ namespace openfixture {
                                     cout << "error, fixture channel starting at 0 and channelStartsAtOne equals true: " << defName << std::endl;
                                 }
                             }
-                        
-                        
+						
                         chanelDef[ values[0] ] = nameValueInt;
                         channelsNames.push_back( values[0] );
+
+						if( values[0] == "dimmer" ){
+							cout << "channelDef:  " << defName <<  values[0] << " NVI " << nameValueInt << std::endl;
+							blackoutMask.push_back( nameValueInt );
+							dimmerExists = true;
+						}
+						
                         
-                    }else if( nameValue[0] == "blackout" ){
-                        
-                        
-                        auto values = split( nameValue[1], ',' );
-                        
-                        
-                        
-                        for(auto& v : values){
-                            
-                            if( isInteger( v ) ){
-                                blackoutMask.push_back( stoi(v) );
-                            }
-                            
-                        }
+                    }
+					
+					else if( nameValue[0] == "blackout" ){
+						
+						if( dimmerExists == false ){
+
+								auto values = split( nameValue[1], ',' );
+								for(auto& v : values){
+									
+									if( isInteger( v ) ){
+										blackoutMask.push_back( stoi(v) -1 );
+									}
+									
+								}
+							
+							}
                         
                     }else{
                         //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
@@ -355,11 +361,11 @@ namespace openfixture {
         }
         
         //
-        std::vector< ofix::FixtureRef > getFixturesWithDefinitionName( std::string name ){
+        std::vector< ofix::Fixture* > getFixturesWithDefinitionName( std::string name ){
             
-            std::vector< ofix::FixtureRef > result;
+            std::vector< ofix::Fixture* > result;
             auto def = Definition::getDefinitionByName(name);
-            
+			result = def->getFixtures();
             return result;
         }
         
@@ -414,8 +420,21 @@ namespace openfixture {
             }
 
         }
+		
+		
+		void update() {
+			for (auto & fix : mFixtures) {
+				fix->updateEasing();
+			}
+		}
         
-        
+		
+		std::vector<FixtureRef> getFixtures(){
+			return mFixtures;
+		}
+		
+		
+		
     private:
         
         //

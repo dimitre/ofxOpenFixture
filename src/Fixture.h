@@ -212,7 +212,8 @@ namespace openfixture {
             
             mode = m;
             mChannels.resize(mDefPtr->getMaxChannels(this));
-            
+			mChannelsEasy.clear();
+            mChannelsEasy.resize(mDefPtr->getMaxChannels(this));
             
             if( resetToDefault == true ){
                
@@ -223,6 +224,8 @@ namespace openfixture {
                     for(int i = 0; i < mChannels.size(); i++ ){
                         auto defaultv = mDefPtr->defaultValues[mode][i];
                         mChannels[i] = defaultv;
+						
+						mChannelsEasy[i] = defaultv;
                     }
                 }
             }
@@ -254,24 +257,28 @@ namespace openfixture {
         
         uint8_t getChannel(int channel) const{
             
-            if( mIsBlackout && mBlackoutMask.size() == 0 ){
-                return 0;
-            }
-            
-            
-            if( mIsBlackout ){
-                
-                if( std::find(mBlackoutMask.begin(), mBlackoutMask.end(), channel) != mBlackoutMask.end() ){
-                    
-                    return 0;
-                    
-                }else{
-                
-                    return mChannels[channel];
-                }
-            }
-           
-            return mChannels[channel];
+//            if( mIsBlackout && mBlackoutMask.size() == 0 ){
+//                return 0;
+//            }
+//            
+//            
+//            if( mIsBlackout ){
+//                
+//                if( std::find(mBlackoutMask.begin(), mBlackoutMask.end(), channel) != mBlackoutMask.end() ){
+//                    
+//                    return 0;
+//                    
+//                }else{
+//					// TESTE
+//                    //return mChannels[channel];
+//					
+//					return int(mChannelsEasy[channel]);
+//                }
+//            }
+			
+			return int(mChannelsEasy[channel]);
+
+            //return mChannels[channel];
         }
         
     
@@ -326,12 +333,64 @@ namespace openfixture {
         Definition* getDefinitionPtr(){
             return mDefPtr;
         }
-        
+		
+		float easyIn = 10.0;
+		float easyOut = 20.0;
+		//bool useEasing = true;
+		
+		void updateEasing() {
+			
+			for (int a=0; a<mChannels.size(); a++) {
+				
+				float target = 0;
+
+				
+//				if (canal tem blackout) {
+//					if (canal esta setado blackou)
+//						-0
+//						
+//					else
+//						*.fade
+//					} else {
+//							normal
+//						}
+				
+				
+				// blackout mask
+				if( mIsBlackout && !mBlackoutMask.size() ){
+					target = 0;
+				}else if( mIsBlackout && std::find(mBlackoutMask.begin(), mBlackoutMask.end(), a) != mBlackoutMask.end() ){
+					target = 0;
+				}else if (std::find(mBlackoutMask.begin(), mBlackoutMask.end(), a) != mBlackoutMask.end()) {
+					target = mChannels[a] * masterFade;
+				} else {
+					target = mChannels[a];
+				}
+				
+				
+				if ( target > mChannelsEasy[a]) {
+					if (easyIn > 1 ) {
+						mChannelsEasy[a] += (float(target) - mChannelsEasy[a]) / easyIn;
+					} else {
+						mChannelsEasy[a] = target;
+					}
+				} else {
+					if (easyOut > 1 ) {
+						mChannelsEasy[a] += (float(target) - mChannelsEasy[a]) / easyOut;
+					} else {
+						mChannelsEasy[a] = target;
+					}
+				}
+				
+			}
+		}
 
         friend class Definition;
 
         // one key can have multiple values, eg: "group=stage,lowerLeft,back"
         std::map<std::string, std::vector<std::string> > customProp;
+		
+		static float masterFade;
         
     protected:
         
@@ -343,6 +402,9 @@ namespace openfixture {
         int modelId = -1;
         
         std::vector<uint8_t> mChannels;
+		
+		// DIMITRE
+		std::vector<float> mChannelsEasy;
         
         bool mIsBlackout = false;
         std::vector<int> mBlackoutMask;
@@ -350,7 +412,8 @@ namespace openfixture {
         Definition* mDefPtr;
         
     };
-    
+	
+	
     
     class Universe{
         
@@ -412,7 +475,7 @@ namespace openfixture {
         
         
     private:
-        std::array<uint8_t, 512> mDmxData;
+        std::array<uint8_t, 512> mmChannels;
         std::map<int, FixtureRef> fixturesMap;
         
         int lastAvailableChannel = 0;

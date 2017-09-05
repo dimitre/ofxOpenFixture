@@ -32,7 +32,10 @@ namespace openfixture{
             
             std::map<string, int> channelDef;
             std::vector<std::string> channelsNames;
-            
+			
+			std::vector<int> blackoutMask;
+			bool dimmerExists = false;
+			
             int channelIndex = 0;
             
             int index = 0;
@@ -41,11 +44,17 @@ namespace openfixture{
                 std::string channelNameFiltered = filterString(channelName.asString());
                 channelsNames.push_back(channelNameFiltered );
                 channelDef[channelNameFiltered] = index;
+				
+				if( channelNameFiltered == "dimmer" ){
+					blackoutMask.push_back( index );
+				}
+				
                 index++;
             }
             
             def->addMode( channelDef );
             def->setChannelNames(channelsNames );
+			def->setBlackoutMask(blackoutMask);
         }
         return def;
     }
