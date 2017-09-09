@@ -55,7 +55,7 @@ namespace openfixture {
                     if(  isInteger( nameValue[0] ) ){
                         // add a channel definitiion
                         auto values = split( nameValue[1], ',' );
-\
+
                         if( values.size() > 1 ){
                             // set a default value
                             int v = stoi( values[1] );
@@ -122,6 +122,109 @@ namespace openfixture {
             
             return def;
         }
+        
+        
+        void appendSchemeToDefinition(ofix::Definition* def,  const std::vector< std::vector<std::string>>& schema, bool channelStartsAtOne = true ){
+
+            for(auto defString :  schema){
+             
+                std::string defName = defString[0];
+                defString.erase(defString.begin());
+
+                
+                std::map<std::string, int> chanelDef;
+                std::vector<int> blackoutMask;
+                bool dimmerExists = false;
+                std::map<std::string, std::vector<std::string>> propsDef;
+                
+                std::vector<std::string> channelsNames;
+                std::vector<int> defaultValues;
+                
+                
+                for( auto channelString : defString ){
+                    
+                    auto nameValue = split( channelString, '=' );
+                    
+                    if(  isInteger( nameValue[0] ) ){
+                        // add a channel definitiion
+                        auto values = split( nameValue[1], ',' );
+                        
+                        if( values.size() > 1 ){
+                            // set a default value
+                            int v = stoi( values[1] );
+                            defaultValues.push_back( v );
+                            
+                        }else{
+                            //if there is no default value, set it to 0
+                            defaultValues.push_back( 0 );
+                        }
+                        
+                        int nameValueInt = stoi( nameValue[0] );
+                        
+                        if( channelStartsAtOne ){
+                            nameValueInt -= 1;
+                            
+                            if( nameValueInt < 0 ){
+                                nameValueInt = 0;
+                                cout << "error, fixture channel starting at 0 and channelStartsAtOne equals true: " << defName << std::endl;
+                            }
+                        }
+                        
+                        chanelDef[ values[0] ] = nameValueInt;
+                        channelsNames.push_back( values[0] );
+                        
+                        if( values[0] == "dimmer" ){
+                            cout << "channelDef:  " << defName <<  values[0] << " NVI " << nameValueInt << std::endl;
+                            blackoutMask.push_back( nameValueInt );
+                            dimmerExists = true;
+                        }
+                        
+                        
+                    }//eof channel props
+                    
+                    else if( nameValue[0] == "blackout" ){
+                        
+                        if( dimmerExists == false ){
+                            
+                            auto values = split( nameValue[1], ',' );
+                            for(auto& v : values){
+                                
+                                if( isInteger( v ) ){
+                                    blackoutMask.push_back( stoi(v) -1 );
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }else{
+                        //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
+                        auto values = split( nameValue[1], ',' );
+                        propsDef[ nameValue[0] ] = values;
+                    }
+                    
+                    
+                }
+                
+                if(chanelDef.size())
+                    def->addMode(chanelDef);
+                
+                if(channelsNames.size())
+                    def->setChannelNames( channelsNames );
+                
+                if( defaultValues.size() )
+                    def->setDefaultValue( defaultValues );
+                
+                if(propsDef.size())
+                    def->setCustomPropreties(propsDef);
+                
+                if( blackoutMask.size())
+                    def->setBlackoutMask(blackoutMask);
+
+            }
+        }
+        
+        
         
         ofix::Universe* createUniverseFromScheme( const std::vector< std::vector<std::string>>& scheme, std::string uniName = "", bool channelStartsAtOne = true ){
 

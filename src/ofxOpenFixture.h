@@ -24,9 +24,7 @@ namespace openfixture{
         ofxJSON jsonobj( json_string );
         
         std::string defNameFiltered = filterString(jsonobj["shortName"].asString());
-        
         auto def = Definition::createDefinition( defNameFiltered );
-        
         
         for( const auto& j : jsonobj["modes"] ){
             
@@ -94,7 +92,23 @@ namespace openfixture{
                 
                 
                 else if( file.getExtension() == "json" ){
-                    createDefinitionFromJson( ofBufferFromFile( dir.getPath(i) ).getText() ) ;
+                    Definition* def = createDefinitionFromJson( ofBufferFromFile( dir.getPath(i) ).getText() ) ;
+
+                    std::string additionalInfoFile = ofSplitString(dir.getFile(i).getFileName(), ".")[0] + ".txt";
+                    
+                    ofFile extensionFile( ofToDataPath( folder_path + "/extensions/" + additionalInfoFile) );
+                    
+                    if( extensionFile.exists()  ){
+                        
+                        
+                        
+                        std::vector <std::vector <std::string>> scheme = ofix::loadSchemeFromString( ofBufferFromFile( extensionFile.path() ).getText() );
+                        
+                        
+                        mOfix.appendSchemeToDefinition( def, scheme );
+                        
+                    }
+                    
                 }
             }
             
