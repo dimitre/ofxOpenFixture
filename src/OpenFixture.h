@@ -133,6 +133,8 @@ namespace openfixture {
 
                 
                 std::map<std::string, int> chanelDef;
+                int defaultMode = 0;
+                
                 std::vector<int> blackoutMask;
                 bool dimmerExists = false;
                 std::map<std::string, std::vector<std::string>> propsDef;
@@ -189,15 +191,20 @@ namespace openfixture {
                             auto values = split( nameValue[1], ',' );
                             for(auto& v : values){
                                 
-                                if( isInteger( v ) ){
+                                if( isInteger( v ) )
                                     blackoutMask.push_back( stoi(v) -1 );
-                                }
                                 
                             }
                             
                         }
                         
-                    }else{
+                    }else if( nameValue[0] == "mode" ){
+                     
+                        auto values = split( nameValue[1], ',' );
+                        defaultMode = stoi(values[0]);
+                        
+                    }
+                    else{
                         //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
                         auto values = split( nameValue[1], ',' );
                         propsDef[ nameValue[0] ] = values;
@@ -221,12 +228,15 @@ namespace openfixture {
                 if( blackoutMask.size())
                     def->setBlackoutMask(blackoutMask);
 
+                
+                def->setDefaultMode(defaultMode);
+                
             }
         }
         
         
         
-        ofix::Universe* createUniverseFromScheme( const std::vector< std::vector<std::string>>& scheme, std::string uniName = "", bool channelStartsAtOne = true ){
+        ofix::Universe* createUniverseFromScheme( const std::vector< std::vector<std::string>>& scheme, std::string uniName = "", bool channelStartsAtOne = true){
 
             std::unique_ptr<ofix::Universe> uni( new Universe() );
             for(auto fix : scheme){
@@ -248,7 +258,7 @@ namespace openfixture {
                 //std::cout << "ok..." << name << std::endl;
                 
                 auto mFix =  ofix::Fixture::create( defGlobal );
-                mFix->setMode(0);
+                mFix->setMode( defGlobal->getDefaultMode() );
 				
 				// Dimitre inseriu
                 std::vector<std::string> propValues{ name };
@@ -303,10 +313,34 @@ namespace openfixture {
             if( uniName == "" ){
                 uniName = "Universe_" + std::to_string( mUniverses.size() );
             }
-            
+            uni->name = uniName;
             mUniverses[uniName] = std::move(uni);
 
             return &(*uni);
+        }
+        
+        
+        void setUniversePropreties( std::string name, std::string ip, int index ){
+            
+            if( mUniverses.find(name) != mUniverses.end() ){
+                
+                mUniverses[name]->ipAddress = ip;
+                mUniverses[name]->universeIndex = index;
+                
+            }else{
+                
+                cout << "Error, no universe with name: "  << name << endl;
+                
+                
+            }
+            
+            
+            for( auto& u : mUniverses){
+                
+                cout << u.first << endl;
+                
+            }
+            
         }
         
         
@@ -351,13 +385,13 @@ namespace openfixture {
 		
         
         
-        void setFixturesChannelByModelId( string modelName, int id_,  int val ){
-            
-            
-            
-            
-        }
-        
+//        void setFixturesChannelByModelId( string modelName, int id_,  int val ){
+//            
+//            
+//            
+//            
+//        }
+//        
         Fixture* getFixtureByModelId(string modelName, int id_){
             
             
@@ -537,12 +571,12 @@ namespace openfixture {
 		}
 		
 		
-		
-    private:
-        
-        //
+
         std::vector<FixtureRef> mFixtures;
         std::map<std::string, std::unique_ptr<Universe> > mUniverses;
+        
+    private:
+        
     };
     
 }

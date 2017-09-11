@@ -66,6 +66,14 @@ namespace openfixture {
             modes.push_back( mode );
         }
         
+        void setDefaultMode(int mode){
+            defaultMode = mode;
+        }
+        
+        int getDefaultMode(){
+            return defaultMode;
+        }
+        
         void setDefaultValue(const std::vector<int> & value){
             defaultValues.push_back( value );
         }
@@ -156,6 +164,7 @@ namespace openfixture {
         
         // Channels definitions and default values
         
+        int defaultMode = 0;
         std::vector< std::map<std::string, int>> modes;
         std::vector< std::vector< std::string > > names;
         
@@ -190,6 +199,9 @@ namespace openfixture {
             def->mFixtures.push_back( this );
             
             modelId = def->mFixtures.size() - 1;
+                    
+            setMode( def->defaultMode );
+        
         }
         
         static FixtureRef create( Definition* def ){
@@ -472,7 +484,9 @@ namespace openfixture {
             return fixtures;
         }
         
-        
+        std::string name = "";
+        std::string ipAddress = "0.0.0.0";
+        int universeIndex; 
         
     private:
         std::array<uint8_t, 512> mmChannels;

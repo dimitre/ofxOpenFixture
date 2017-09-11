@@ -122,8 +122,62 @@ namespace openfixture{
             
             for( int i = 0; i < dir.listDir(); i++  ){
                 
-                mOfix.createUniverseFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
+                ofFile file(dir.getPath(i));
+                
+                string uniname = ofSplitString(file.getFileName(), ".")[0] ;
+                
+                mOfix.createUniverseFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ), uniname );
             }
+        }
+        
+        
+        void setUniversesProps( std::string file_path = "ips.txt" ){
+            
+            std::ifstream file(  ofToDataPath(file_path) );
+            
+            std::string line;
+            
+            std::string currentIp = "";
+            int currentIndex = 0;
+            
+            while( std::getline( file, line ) )
+            {
+                auto s = filterString(line);
+                
+                
+                if( s[0] == '[' ){
+                    // start a new fixture scheme
+                    
+                    cout << "current IP" << endl;
+                    
+                    currentIp = s;
+                    currentIp.pop_back();
+                    currentIp.erase(0,1);
+                    
+                }
+                
+                else if(s[0] == '#' || s == ""){
+                    // ignore comments & empty lines
+                    continue;
+                }
+                else{
+                    // add properties
+                    
+                    if(currentIp == "" ){
+                        std::cout << "error setting value without a ip address" << std::endl;
+                    }else{
+
+                        vector<string> uniId = ofix::split(line, '_');
+
+                        int index = stoi(uniId[1]);
+                        mOfix.setUniversePropreties(line, currentIp,  index );
+                        
+                    }
+                }
+            }
+            
+//            return saida;
+            
         }
 
 
