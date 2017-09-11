@@ -333,13 +333,7 @@ namespace openfixture {
                 
                 
             }
-            
-            
-            for( auto& u : mUniverses){
-                
-                cout << u.first << endl;
-                
-            }
+
             
         }
         

@@ -77,7 +77,7 @@ namespace openfixture{
         ofxOpenFixture(){
         }
         
-        void loadFixturesDefFromFolder( std::string folder_path = "_fixtures/" ){
+        void loadFixturesDefFromFolder( std::string folder_path = "_dmx/_fixtures/" ){
             ofDirectory dir;
             dir.open( folder_path );
             for( int i = 0; i < dir.listDir(); i++  ){
@@ -115,7 +115,7 @@ namespace openfixture{
         }
         
         
-        void loadUniversesDefFromFolder( std::string folder_path = "_universes/"  ){
+        void loadUniversesDefFromFolder( std::string folder_path = "_dmx/_universes/"  ){
             
             ofDirectory dir;
             dir.open( folder_path );
@@ -131,7 +131,7 @@ namespace openfixture{
         }
         
         
-        void setUniversesProps( std::string file_path = "ips.txt" ){
+        void setUniversesProps( std::string file_path = "_dmx/ips.txt" ){
             
             std::ifstream file(  ofToDataPath(file_path) );
             
