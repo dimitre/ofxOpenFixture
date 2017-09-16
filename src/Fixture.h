@@ -404,6 +404,8 @@ namespace openfixture {
 		
 		static float masterFade;
         
+        bool paninvert = false;
+        
     protected:
         
         int mode = 0;

@@ -53,7 +53,8 @@ namespace openfixture {
         result.erase(std::remove(result.begin(), result.end(), '\t'), result.end());
        
        std::replace( result.begin(), result.end(), '/', '_');
-       
+	   std::replace( result.begin(), result.end(), ',', '_');
+	   
         return result;
     }
 

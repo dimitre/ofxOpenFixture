@@ -42,6 +42,15 @@ namespace openfixture {
 
     void Fixture::setChannelByName(const std::string& name, uint8_t value){
         
+        if( paninvert && name == "pan"  ){
+            value = 255 - value;
+        }
+        
+        if( paninvert && name == "tilt"  ){
+            value = 255 - value;
+        }
+        
+        
         int channel = mDefPtr->getChannelByName(this, name);
         mChannels[channel] = value;
         

@@ -85,26 +85,18 @@ namespace openfixture {
 							blackoutMask.push_back( nameValueInt );
 							dimmerExists = true;
 						}
-						
-                        
                     }
 					
 					else if( nameValue[0] == "blackout" ){
-						
 						if( dimmerExists == false ){
-
-								auto values = split( nameValue[1], ',' );
-								for(auto& v : values){
-									
-									if( isInteger( v ) ){
-										blackoutMask.push_back( stoi(v) -1 );
-									}
-									
+							auto values = split( nameValue[1], ',' );
+							for(auto& v : values){
+								if( isInteger( v ) ){
+									blackoutMask.push_back( stoi(v) -1 );
 								}
-							
 							}
-                        
-                    }else{
+						}
+                    } else {
                         //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
                         auto values = split( nameValue[1], ',' );
                         propsDef[ nameValue[0] ] = values;
@@ -385,26 +377,35 @@ namespace openfixture {
 //            
 //            
 //        }
-//        
-        Fixture* getFixtureByModelId(string modelName, int id_){
-            
-            
-            auto def = getDefinitionByName(modelName);
-            
-            
-            auto fixtures = def->getFixtures();
-            
-            
-            for(auto& f : fixtures ){
-                
-                if( f->getModelId() == id_ ){
-                    return f;
-                }
-                
-            }
-            
-        }
-        
+//
+		
+		//std::vector<FixtureRef> getFixtures(){
+
+		
+		Fixture* getFixtureByModelId(string modelName, int id_){
+			auto def = getDefinitionByName(modelName);
+			auto fixtures = def->getFixtures();
+			for(auto& f : fixtures ){
+				if( f->getModelId() == id_ ){
+					return f;
+				}
+			}
+		}
+		
+		
+		// dimitre dia 13 de setembro
+//		vector <Fixture*> getFixtureByModelId(string modelName, int id_){
+//			//vector <Fixture*> saida;
+//			auto def = getDefinitionByName(modelName);
+//			auto fixtures = def->getFixtures();
+//			return fixtures;
+//		}
+
+		vector <Fixture*> getFixturesByModel(string modelName){
+			auto def = getDefinitionByName(modelName);
+			return def->getFixtures();
+		}
+		
         
 		
 		// DIMITRE, experimental - 04/09/2017
@@ -444,7 +445,7 @@ namespace openfixture {
 		
 		// DIMITRE
 		vector <string> getFixtureNamesWithPropertiesValue(string name, string value) {
-			cout << "===== BEGIN" << endl;
+			//cout << "===== BEGIN" << endl;
 			vector <string> result;
 			for(auto& fix : mFixtures){
 				//cout << fix->getDefinitionPtr()->getModelName() << endl;;
