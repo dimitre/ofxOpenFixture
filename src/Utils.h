@@ -43,7 +43,7 @@ namespace openfixture {
         return internal;
     }
     
-   inline std::string filterString(const std::string& input ){
+   inline std::string filterString(const std::string& input, bool replaceComma = false ){
         
         std::string result = input;
 	   
@@ -53,8 +53,10 @@ namespace openfixture {
         result.erase(std::remove(result.begin(), result.end(), '\t'), result.end());
        
        std::replace( result.begin(), result.end(), '/', '_');
-	   std::replace( result.begin(), result.end(), ',', '_');
 	   
+       if(replaceComma)
+        std::replace( result.begin(), result.end(), ',', '_');
+       
         return result;
     }
 

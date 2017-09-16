@@ -128,6 +128,7 @@ namespace openfixture {
                 int defaultMode = 0;
                 
                 std::vector<int> blackoutMask;
+                std::vector<int> nullChannels;
                 bool dimmerExists = false;
                 std::map<std::string, std::vector<std::string>> propsDef;
                 
@@ -196,6 +197,23 @@ namespace openfixture {
                         defaultMode = stoi(values[0]);
                         
                     }
+                    
+                    else if( nameValue[0] == "null"){
+                        
+                        cout << "null channels: ";
+                        
+                        auto values = split( nameValue[1], ',' );
+                        for(auto& v : values){
+                            
+                            if( isInteger( v ) ){
+                                
+                                cout << v << endl;
+                                nullChannels.push_back( stoi(v) -1 );
+                            }
+                            
+                        }
+                    }
+                    
                     else{
                         //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
                         auto values = split( nameValue[1], ',' );
@@ -220,8 +238,10 @@ namespace openfixture {
                 if( blackoutMask.size())
                     def->setBlackoutMask(blackoutMask);
 
-                
                 def->setDefaultMode(defaultMode);
+                
+                cout << "defName: "  << defName << endl;
+                def->setNullChannelsMask( nullChannels );
                 
             }
         }
@@ -328,9 +348,7 @@ namespace openfixture {
 
             
         }
-        
-        
-        
+
         //
         std::vector< ofix::FixtureRef > getFixturesWithPropertiesValue( std::string name, std::string value  ){
 

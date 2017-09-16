@@ -39,7 +39,7 @@ namespace openfixture{
             int index = 0;
             for( const auto& channelName : j["channels"]){
                 
-                std::string channelNameFiltered = filterString(channelName.asString());
+                std::string channelNameFiltered = filterString(channelName.asString(), true);
                 channelsNames.push_back(channelNameFiltered );
                 channelDef[channelNameFiltered] = index;
 				
@@ -175,11 +175,7 @@ namespace openfixture{
                     }
                 }
             }
-            
-//            return saida;
-            
         }
-
 
         
         ofix::OpenFixture& operator()(){
@@ -190,9 +186,7 @@ namespace openfixture{
         
         std::string myComputerIp = "192.168.0.1";
         ofix::OpenFixture mOfix;
-        
-        
-        
+
     };
 
 

@@ -84,7 +84,23 @@ namespace openfixture {
         
         
         std::vector< std::string > getChannelNames(int mode) const {
-            return names[mode];
+            
+            auto maskedNames = names[mode];
+            
+            if( mNullChannelsMask.size() != 0 )
+            {
+
+                for( auto& nullChannel : mNullChannelsMask ){
+                    std::cout << "null channel: " <<  nullChannel << std::endl;
+                    
+                    if( nullChannel < maskedNames.size() ){
+                        maskedNames[nullChannel] = "null";
+                    }
+                    
+                }
+            }
+            
+            return maskedNames;
         }
         
         int getChannelIndexByName(const std::string& name, int mode = 0 ){
@@ -134,10 +150,17 @@ namespace openfixture {
             
         }
         
-        void setBlackoutMask( std::vector<int>& mask ){
+        void setBlackoutMask(const std::vector<int>& mask ){
             
             mBlackoutMask = mask;
         }
+        
+        void setNullChannelsMask(const std::vector<int>& nullChannels ){
+            
+            mNullChannelsMask = nullChannels;
+            
+        }
+        
         
         std::vector<int> getBlackoutMask(){
             return mBlackoutMask;
@@ -174,6 +197,7 @@ namespace openfixture {
         std::map<std::string, std::vector<std::string>> customPropreties;
         
         std::vector<int> mBlackoutMask;
+        std::vector<int> mNullChannelsMask;
 
         
         std::vector< Fixture* > mFixtures;
