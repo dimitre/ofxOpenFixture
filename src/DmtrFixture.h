@@ -355,6 +355,22 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 
 //--------------------------------------------------------------
 void dmtrFixturesScene() {
+	
+	
+	
+	{
+		string & scene = u.uis["uiDmx"].pString["sceneDmx"];
+		if (scene == "alternate") {
+			for (auto & e : u.uis["ui_at3000"].elements) {
+				if (e->tag == "on") {
+					e->set(beat > .5);
+				}
+			}
+		}
+	}
+	
+	
+	
 	for (auto & c : fixturesWithUI) {
 		ofxDmtrUI3 * uiC = &u.uis["uiscene_" + c];
 		string & scene = u.uis["ui_" + c].pString["scene_" + c];
@@ -364,7 +380,9 @@ void dmtrFixturesScene() {
 		if (scene == "contagem") {
 			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
 			auto contagem = fmod(ofGetElapsedTimef() * 10 , fixtures.size());
-			uiC->pFloat["contagem"] += uiC->pFloat["vel"] + audio * uiC->pFloat["velAudio"] + beat * uiC->pFloat["velBeat"] ;
+			uiC->pFloat["contagem"] += uiC->pFloat["vel"] +
+				audio * uiC->pFloat["velAudio"] +
+				beat * uiC->pFloat["velBeat"] ;
 			for (auto & f : fixtures) {
 				bool ligado = false;
 				if (f->getModelId() == int(contagem)) {
