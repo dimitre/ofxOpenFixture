@@ -207,10 +207,13 @@ void dmtrFixturesSetup() {
 	
 	for (auto & p : mOfxx().getFixturesWithPropertiesValue("paninvert", "1")) {
 		p->panInvert = true;
+		
+		cout << "PANINVERT" << endl;
 	}
     
     for (auto & p : mOfxx().getFixturesWithPropertiesValue("tiltinvert", "1")) {
         p->tiltInvert = true;
+		cout << "TILTINVERT" << endl;
     }
     
     
@@ -378,11 +381,13 @@ void dmtrFixturesScene() {
 		
 		if (scene == "contagem") {
 			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
-			auto contagem = fmod(ofGetElapsedTimef() * 10 , fixtures.size()) + uiC->pInt["c_step"];
+			
+			uiC->pFloat["contagem"] += uiC->pFloat["vel"] + audio * uiC->pFloat["velAudio"] + beat * uiC->pFloat["velBeat"] ;
+			
+			auto contagem = fmod(uiC->pFloat["contagem"] , fixtures.size()) + uiC->pInt["c_step"];
 			
             
-            uiC->pFloat["contagem"] += uiC->pFloat["vel"] + audio * uiC->pFloat["velAudio"] + beat * uiC->pFloat["velBeat"] ;
-            
+			
             int numOfFixtures =  uiC->pFloat["quantidade"] * fixtures.size();
             int lastIndex = (int(contagem) - numOfFixtures) % fixtures.size();
             
@@ -437,6 +442,9 @@ void dmtrFixturesScene() {
 			string p = uiC->pString["param"];
 			
 			if (audio > uiC->pFloat["threshold"]) {
+				
+				ofColor cor = uiC->pColor["corPeak"];
+				
 				u.uis["ui_" + c].set("red",		uiC->pColor["corPeak"].r);
 				u.uis["ui_" + c].set("green",	uiC->pColor["corPeak"].g);
 				u.uis["ui_" + c].set("blue",	uiC->pColor["corPeak"].b);
@@ -446,8 +454,17 @@ void dmtrFixturesScene() {
 				u.uis["ui_" + c].set("aurared",		uiC->pColor["corPeak"].r);
 				u.uis["ui_" + c].set("auragreen",	uiC->pColor["corPeak"].g);
 				u.uis["ui_" + c].set("aurablue",	uiC->pColor["corPeak"].b);
+				
+				
+				u.uis["ui_" + c].set("cyan",			255-cor.r);
+				u.uis["ui_" + c].set("magenta",		255-cor.g);
+				u.uis["ui_" + c].set("yellow",		255-cor.b);
+
 			}
 			else {
+				
+				ofColor cor = uiC->pColor["cor"];
+
 				u.uis["ui_" + c].set("red",		uiC->pColor["cor"].r);
 				u.uis["ui_" + c].set("green",	uiC->pColor["cor"].g);
 				u.uis["ui_" + c].set("blue",	uiC->pColor["cor"].b);
@@ -457,6 +474,13 @@ void dmtrFixturesScene() {
 				u.uis["ui_" + c].set("aurared",		uiC->pColor["cor"].r);
 				u.uis["ui_" + c].set("auragreen",	uiC->pColor["cor"].g);
 				u.uis["ui_" + c].set("aurablue",	uiC->pColor["cor"].b);
+				
+				
+				
+				u.uis["ui_" + c].set("cyan",			255-cor.r);
+				u.uis["ui_" + c].set("magenta",		255-cor.g);
+				u.uis["ui_" + c].set("yellow",		255-cor.b);
+
 			}
 			
 			
