@@ -90,6 +90,8 @@ namespace openfixture {
                         
                         if(nameValue[1] == "null"  ){
                             
+                            cout << "ignore master fade: " << defName << endl;
+                            
                             def->setIgnoreMasterFade(true);
                             
                         }
@@ -186,16 +188,22 @@ namespace openfixture {
                     
                     else if( nameValue[0] == "blackout" ){
                         
-                        if( dimmerExists == false ){
+                        if(nameValue[1] == "null"  ){
+                            
+                            cout << "ignore master fade: " << defName << endl;
+                            
+                            def->setIgnoreMasterFade(true);
+                            
+                        }
+                        
+                        else if ( dimmerExists == false ){
                             
                             auto values = split( nameValue[1], ',' );
                             for(auto& v : values){
-                                
-                                if( isInteger( v ) )
+                                if( isInteger( v ) ){
                                     blackoutMask.push_back( stoi(v) -1 );
-                                
+                                }
                             }
-                            
                         }
                         
                     }else if( nameValue[0] == "mode" ){
