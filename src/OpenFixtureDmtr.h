@@ -119,9 +119,6 @@ namespace openfixture{
                 }else{
                     
                     // TODO: split in ','
-                    
-                    
-                    
                     saida[currentIndex].push_back(s);
                 }
             }
