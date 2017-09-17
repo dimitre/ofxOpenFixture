@@ -129,7 +129,6 @@ void dmtrFixturesSetup() {
 				for (auto & g : fix->customProp["group"]) {
 					if (std::find(groups.begin(), groups.end(),g)==groups.end()) {
 						groups.push_back(g);
-						cout << g << endl;
 					}
 				}
 			}
@@ -141,10 +140,10 @@ void dmtrFixturesSetup() {
 			
             int mode = modelGroup.second[0]->getMode();
             
-            if(mode != 0){
-                cout << mode << endl;
-            }
-            
+//            if(mode != 0){
+//                cout << mode << endl;
+//            }
+//            
             
 			for(  auto name : defPtr->getChannelNames(mode ) ){
 				if (name != "null") {
