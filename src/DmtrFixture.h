@@ -379,25 +379,37 @@ void dmtrFixturesScene() {
 		
 		if (scene == "contagem") {
 			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
-			auto contagem = fmod(ofGetElapsedTimef() * 10 , fixtures.size());
-			uiC->pFloat["contagem"] += uiC->pFloat["vel"] +
-				audio * uiC->pFloat["velAudio"] +
-				beat * uiC->pFloat["velBeat"] ;
-			for (auto & f : fixtures) {
-				bool ligado = false;
-				if (f->getModelId() == int(contagem)) {
-					ligado = true;
-				}
+			auto contagem = fmod(ofGetElapsedTimef() * 10 , fixtures.size()) + uiC->pInt["c_step"];
+			
+            
+            uiC->pFloat["contagem"] += uiC->pFloat["vel"] + audio * uiC->pFloat["velAudio"] + beat * uiC->pFloat["velBeat"] ;
+            
+            int numOfFixtures =  uiC->pFloat["quantidade"] * fixtures.size();
+            int lastIndex = (int(contagem) - numOfFixtures) % fixtures.size();
+            
+            
+    
+            for( int i = 0; i < fixtures.size(); i++ ){
+                bool ligado = false;
+                string name = "on_" + c + "_" + ofToString(fixtures[i]->getModelId());
+                u.uis["ui_" + c].set(name, ligado);
+            }
+            
+            int steps = uiC->pInt["c_step"];;
+            for(int k = 0; k < steps; k++){
+                
+                int initialIndex = (fixtures.size() / steps) * k;
+                
+                for( int i = 0; i < numOfFixtures; i++ ){
+                    int index = (int(contagem) + i+ initialIndex) % fixtures.size();
 
-				if (uiC->pBool["dois"]) {
-				if (f->getModelId() == int(contagem + fixtures.size()/2)%fixtures.size()) {
-					ligado = true;
-				}
-				}
-
-				string name = "on_" + c + "_" + ofToString(f->getModelId());
-				u.uis["ui_" + c].set(name, ligado);
-			}
+                    
+                    bool ligado = true;
+                    string name = "on_" + c + "_" + ofToString(fixtures[index]->getModelId());
+                    u.uis["ui_" + c].set(name, ligado);
+                    
+                }
+            }
 
 		}
 		
