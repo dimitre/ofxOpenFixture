@@ -27,7 +27,9 @@ void dmtrFixturesSetup() {
 	uiDmx->templateVectorString["palco"] = mOfxx().getPropertiesWithPropertiesValue("group", "palco");
 	uiDmx->templateVectorString["general"] = mOfxx().getFixtureNamesWithPropertiesValue("group", "general");
 	
-
+    
+    
+    
 	{
 		auto models =  mOfxx().getFixturesWithProperties("model");
 		for (auto & modelGroup : models) {
@@ -43,8 +45,6 @@ void dmtrFixturesSetup() {
 			}
 			
 			string model = modelGroup.first;
-
-
 
 
 			// dimitre experimental test
@@ -206,9 +206,16 @@ void dmtrFixturesSetup() {
 	
 	
 	
-	for (auto & p : mOfxx().getFixturesWithPropertiesValue("paninvert", "true")) {
-		p->paninvert = true;
+	for (auto & p : mOfxx().getFixturesWithPropertiesValue("paninvert", "1")) {
+		p->panInvert = true;
 	}
+    
+    for (auto & p : mOfxx().getFixturesWithPropertiesValue("tiltinvert", "1")) {
+        p->tiltInvert = true;
+    }
+    
+    
+    
 	
 	
     image.allocate(20,26, OF_IMAGE_COLOR);
@@ -613,6 +620,9 @@ void dmtrFixturesUIEvent(uiEv & e) {
 	
 	
 	}
+    
+    
+    
 	else if (e.tag == "on") {
 		string eventPrefix = ofSplitString( e.name, "_")[0];
 		if( eventPrefix == "on") {

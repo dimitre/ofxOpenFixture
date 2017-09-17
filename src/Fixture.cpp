@@ -42,11 +42,11 @@ namespace openfixture {
 
     void Fixture::setChannelByName(const std::string& name, uint8_t value){
         
-        if( paninvert && name == "pan"  ){
+        if( panInvert && name == "pan"  ){
             value = 255 - value;
         }
         
-        if( paninvert && name == "tilt"  ){
+        if( tiltInvert && name == "tilt"  ){
             value = 255 - value;
         }
         

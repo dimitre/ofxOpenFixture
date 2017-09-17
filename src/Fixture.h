@@ -174,6 +174,12 @@ namespace openfixture {
             name = name_;
         }
         
+        void setIgnoreMasterFade( bool v ){
+            ignoreMasterFade = v;
+        }
+        bool getIgnoreMasterFade(){
+            return ignoreMasterFade;
+        }
         
         friend Fixture;
     private:
@@ -202,6 +208,9 @@ namespace openfixture {
         
         std::vector< Fixture* > mFixtures;
         std::string name;
+        
+        bool ignoreMasterFade = false;
+
     };
     
 
@@ -225,6 +234,7 @@ namespace openfixture {
             modelId = def->mFixtures.size() - 1;
                     
             setMode( def->defaultMode );
+            
         
         }
         
@@ -259,7 +269,8 @@ namespace openfixture {
                 if( mDefPtr->defaultValues.size() > 0 ){
                     for(int i = 0; i < mChannels.size(); i++ ){
                         auto defaultv = mDefPtr->defaultValues[mode][i];
-                        mChannels[i] = defaultv;
+                        
+                        setChannel(i, defaultv);
 						
 						mChannelsEasy[i] = defaultv;
                     }
@@ -277,6 +288,25 @@ namespace openfixture {
         
         
         void setChannel(int channel, uint8_t value ){
+            
+            
+            if( panInvert ){
+                auto panChannel = mDefPtr->getChannelByName(this, "pan");
+                if( panChannel == channel ){
+                    value = 255 - value;
+                }
+            }
+            
+            if(tiltInvert){
+                
+                auto tiltChannel = mDefPtr->getChannelByName(this, "tilt");
+                if( tiltChannel == channel ){
+                    value = 255 - value;
+                }
+            }
+            
+            
+            
              mChannels[channel] = value;
         }
         
@@ -392,16 +422,26 @@ namespace openfixture {
 //						}
 				
 				
-				// blackout mask
+				//check if we are on black out and we have a mask
 				if( mIsBlackout && !mBlackoutMask.size() ){
 					target = 0;
-				}else if( mIsBlackout && std::find(mBlackoutMask.begin(), mBlackoutMask.end(), a) != mBlackoutMask.end() ){
-					target = 0;
-				}else if (std::find(mBlackoutMask.begin(), mBlackoutMask.end(), a) != mBlackoutMask.end()) {
-					target = mChannels[a] * masterFade;
-				} else {
-					target = mChannels[a];
 				}
+                //check if channel is on blackout mask
+                else if( mIsBlackout && std::find(mBlackoutMask.begin(), mBlackoutMask.end(), a) != mBlackoutMask.end() ){
+					target = 0;
+				}
+                
+                //check if we are using master fade and blackout mask
+                else if (std::find(mBlackoutMask.begin(), mBlackoutMask.end(), a) != mBlackoutMask.end() && ! mDefPtr->ignoreMasterFade) {
+					target = mChannels[a] * masterFade;
+
+				} else if( mBlackoutMask.size() == 0 && !mDefPtr->ignoreMasterFade) {
+					target = mChannels[a] * masterFade;
+                    
+                }else{
+                    
+                    target = mChannels[a];
+                }
 				
 				
 				if ( target > mChannelsEasy[a]) {
@@ -428,10 +468,11 @@ namespace openfixture {
 		
 		static float masterFade;
         
-        bool paninvert = false;
-        
+        bool panInvert = false;
+        bool tiltInvert = false;
     protected:
         
+
         int mode = 0;
         
         static int fixtureCount;

@@ -81,20 +81,27 @@ namespace openfixture {
                         channelsNames.push_back( values[0] );
 
 						if( values[0] == "dimmer" ){
-							cout << "channelDef:  " << defName <<  values[0] << " NVI " << nameValueInt << std::endl;
 							blackoutMask.push_back( nameValueInt );
 							dimmerExists = true;
 						}
                     }
 					
 					else if( nameValue[0] == "blackout" ){
-						if( dimmerExists == false ){
-							auto values = split( nameValue[1], ',' );
-							for(auto& v : values){
-								if( isInteger( v ) ){
-									blackoutMask.push_back( stoi(v) -1 );
-								}
-							}
+                        
+                        if(nameValue[1] == "null"  ){
+                            
+                            def->setIgnoreMasterFade(true);
+                            
+                        }
+                        
+						else if ( dimmerExists == false ){
+                        
+                            auto values = split( nameValue[1], ',' );
+                            for(auto& v : values){
+                                if( isInteger( v ) ){
+                                    blackoutMask.push_back( stoi(v) -1 );
+                                }
+                            }
 						}
                     } else {
                         //if nameValue[0] is no a digit or blackout mask, it's a custom propriety
