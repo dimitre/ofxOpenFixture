@@ -148,7 +148,7 @@ namespace openfixture{
                 if( s[0] == '[' ){
                     // start a new fixture scheme
                     
-                    cout << "current IP" << endl;
+//                    cout << "current IP" << endl;
                     
                     currentIp = s;
                     currentIp.pop_back();

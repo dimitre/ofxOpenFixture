@@ -90,7 +90,7 @@ namespace openfixture {
                         
                         if(nameValue[1] == "null"  ){
                             
-                            cout << "ignore master fade: " << defName << endl;
+//                            cout << "ignore master fade: " << defName << endl;
                             
                             def->setIgnoreMasterFade(true);
                             
@@ -178,7 +178,7 @@ namespace openfixture {
                         channelsNames.push_back( values[0] );
                         
                         if( values[0] == "dimmer" ){
-                            cout << "channelDef:  " << defName <<  values[0] << " NVI " << nameValueInt << std::endl;
+//                            cout << "channelDef:  " << defName <<  values[0] << " NVI " << nameValueInt << std::endl;
                             blackoutMask.push_back( nameValueInt );
                             dimmerExists = true;
                         }
@@ -190,7 +190,7 @@ namespace openfixture {
                         
                         if(nameValue[1] == "null"  ){
                             
-                            cout << "ignore master fade: " << defName << endl;
+//                            cout << "ignore master fade: " << defName << endl;
                             
                             def->setIgnoreMasterFade(true);
                             
@@ -215,14 +215,14 @@ namespace openfixture {
                     
                     else if( nameValue[0] == "null"){
                         
-                        cout << "null channels: ";
+//                        cout << "null channels: ";
                         
                         auto values = split( nameValue[1], ',' );
                         for(auto& v : values){
                             
                             if( isInteger( v ) ){
                                 
-                                cout << v << endl;
+//                                cout << v << endl;
                                 nullChannels.push_back( stoi(v) -1 );
                             }
                             
@@ -255,7 +255,7 @@ namespace openfixture {
 
                 def->setDefaultMode(defaultMode);
                 
-                cout << "defName: "  << defName << endl;
+//                cout << "defName: "  << defName << endl;
                 def->setNullChannelsMask( nullChannels );
                 
             }

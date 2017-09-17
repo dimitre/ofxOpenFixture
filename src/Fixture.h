@@ -91,7 +91,7 @@ namespace openfixture {
             {
 
                 for( auto& nullChannel : mNullChannelsMask ){
-                    std::cout << "null channel: " <<  nullChannel << std::endl;
+//                    std::cout << "null channel: " <<  nullChannel << std::endl;
                     
                     if( nullChannel < maskedNames.size() ){
                         maskedNames[nullChannel] = "null";
