@@ -400,8 +400,11 @@ namespace openfixture {
             return mDefPtr;
         }
 		
-		float easyIn = 10.0;
-		float easyOut = 20.0;
+		// XAXA DIMITRE BABEL EASING
+//		float easyIn = 10.0;
+//		float easyOut = 20.0;
+		float easyIn = 0.0;
+		float easyOut = 0.0;
 		//bool useEasing = true;
 		
 		void updateEasing() {

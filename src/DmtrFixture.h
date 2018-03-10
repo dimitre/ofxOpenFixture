@@ -1,5 +1,5 @@
 ofix::ofxOpenFixture mOfxx;
-ofImage image;
+ofImage imageFixture;
 
 
 vector <string> fixturesWithUI;
@@ -7,8 +7,38 @@ vector <string> fixturesWithUI;
 
 bool isBeat = false;
 
+
+// 6 de outubro de 2017, babel, inserindo artnets aqui dentro
+ofxArtnet artnets;
+string computerIP, artnetIP;
+
+ofPixels pixels;
+
 //--------------------------------------------------------------
 void dmtrFixturesSetup() {
+	for (auto & l : u.textToVector("artnet_ip.txt")) {
+		vector <string> col = ofSplitString(l, "	");
+		if (col[0] == "computer") {
+			computerIP = col[1];
+		}
+		else if (col[0] == "artnet") {
+			artnetIP = col[1];
+		}
+	}
+	
+	// ISIS Computer
+	if (!ofFile::doesFileExist("/Users/dimitre")) {
+		computerIP = "192.168.0.11";
+		cout << "isis computer" << endl;
+	} else {
+		cout << "dimi computer" << endl;
+	}
+	
+	
+	cout << "artnets setup, computer ip = " + computerIP << endl;
+	artnets.setup(computerIP.c_str());
+
+	
 	mOfxx.loadFixturesDefFromFolder("_dmx/_fixtures/");
 	mOfxx.loadUniversesDefFromFolder("_dmx/_universes/");
     
@@ -220,8 +250,8 @@ void dmtrFixturesSetup() {
     
 	
 	
-    image.allocate(20,26, OF_IMAGE_COLOR);
-	image.setColor(ofColor(0, 0,0, 0));
+    imageFixture.allocate(20,26, OF_IMAGE_COLOR);
+	imageFixture.setColor(ofColor(0, 0,0, 0));
 	
 //	for (int a=0; a<10; a++) {
 //		uiDmx->templateVectorString["individual"].push_back("int	pan_"+ofToString(a)+"	0 255 0");
@@ -234,7 +264,7 @@ void dmtrFixturesSetup() {
 
 //--------------------------------------------------------------
 void dmtrFixturesUpdate() {
-	
+	//cout << "dmtrFixturesUpdate()" << endl;
 	// easing
 	mOfxx().update();
 	
@@ -254,8 +284,28 @@ void dmtrFixturesUpdate() {
 			}
 		}
 	}
+	
+	
+	
+	
+	if (u.pBool["sendArtnet"] && artnets.status == 2) {
+		auto universes = mOfxx().getUniverses();
+		
+		for (int a=0; a<universes.size(); a++) {
+			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
+			// mandar apenas o universo size ao inves dos 512?
+			
+			//cout << universo << endl;
+			//cout << mOfxx().getUniverses()[a]->getBuffer().data() << endl;
+			artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
+			//cout << "universo send :: " << universo << endl;
+		}
+	}
 }
 
+
+
+ofColor dmtrFixturesDrawColors[5] = { ofColor(244, 0,0 ),  ofColor(244, 0,255 ), ofColor(0, 255,0 ), ofColor(244, 255,255 ), ofColor(127, 255, 0 )  };
 
 //--------------------------------------------------------------
 void dmtrFixturesDraw() {
@@ -263,25 +313,26 @@ void dmtrFixturesDraw() {
 	// IMAGES INSPECTOR
 	
     auto universes = mOfxx().getUniverses();
-    ofColor colors[5] = { ofColor(244, 0,0 ),  ofColor(244, 0,255 ), ofColor(0, 255,0 ), ofColor(244, 255,255 ), ofColor(127, 255, 0 )  };
 	
+	ofPushStyle();
 	ofPushMatrix();
 	ofTranslate(10,0);
 
+	imageFixture.getTexture().setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
 	for (int a=0; a<universes.size(); a++) {
-        ofSetColor ( colors[a%5] );
+        ofSetColor ( dmtrFixturesDrawColors[a%5] );
         auto universe = universes[a];
-		renderUniverse(&image, *universe );
-		image.getTexture().setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
+		renderUniverse(&imageFixture, *universe );
 		float scale = 3;
-        float scaledSizeX = image.getWidth() * scale;
-        float scaledSizeY = image.getHeight() * scale;
+        float scaledSizeX = imageFixture.getWidth() * scale;
+        float scaledSizeY = imageFixture.getHeight() * scale;
 		
-		image.draw( (scaledSizeX + 10 )* a  , ofGetWindowSize().y - scaledSizeY - 10, image.getWidth() * scale, image.getHeight() * scale );
+		imageFixture.draw( (scaledSizeX + 10 )* a  , ofGetWindowSize().y - scaledSizeY - 10, imageFixture.getWidth() * scale, imageFixture.getHeight() * scale );
         
         ofDrawBitmapString( ofToString( universes[a]->universeIndex),  (scaledSizeX + 10 )* a,  ofGetWindowSize().y - scaledSizeY - 20   );
 	}
 	ofPopMatrix();
+	ofPopStyle();
 }
 
 
@@ -304,7 +355,6 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 	}
 	
 	
-	
 
 	
 	if( ui->pBool["individual_" + channel] ) {
@@ -320,7 +370,7 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 			fix->setChannelByName( channel, v );  // + individual ?
 		}
 		
-	}else{
+	} else {
 
 		
 		auto fixtures = mOfxx().getFixturesWithDefinitionName(modelName);
@@ -358,17 +408,61 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 //--------------------------------------------------------------
 void dmtrFixturesScene() {
 	
-	
-	
 	{
 		string & scene = u.uis["uiDmx"].pString["sceneDmx"];
 		if (scene == "alternate") {
-			for (auto & e : u.uis["ui_at3000"].elements) {
-				if (e->tag == "on") {
-					e->set(beat > .5);
+			
+			string f1 = u.uis["uisceneDmx"].pString["fixture1"];
+			string f2 = u.uis["uisceneDmx"].pString["fixture2"];
+			float t = u.uis["uisceneDmx"].pFloat["threshold"];
+			float audioBeat = u.uis["uisceneDmx"].pBool["audio"] ? audio : beat;
+			if (f1 != "_no") {
+				for (auto & e : u.uis["ui_" + f1].elements) {
+					if (e->tag == "on") {
+						e->set(audioBeat > t);
+					}
+				}
+			}
+			
+			if (f2 != "no") {
+				for (auto & e : u.uis["ui_" + f2].elements) {
+					if (e->tag == "on") {
+						e->set(audioBeat < t);
+					}
 				}
 			}
 		}
+		
+//		else if (scene == "eachsupport") {
+//			vector <string> suportes = ofSplitString("macaura macviperwash at3000 robespot2500 martinrushmh2 martinrushmh3 martinrushmh7 martinviperperf", " ");
+//			uiC->pFloat["contagem"] += uiC->pFloat["vel"] + audio * uiC->pFloat["velAudio"] + beat * uiC->pFloat["velBeat"];
+//			auto contagem = fmod(uiC->pFloat["contagem"] , suportes.size()) + uiC->pInt["c_step"];
+//			int numOfFixtures =  uiC->pFloat["quantidade"] * suportes.size();
+//
+//			for (auto & s : suportes) {
+//				u.uis["ui_" + s].set("allOff", true);
+//				
+//
+//			}
+//			int steps = uiC->pInt["c_step"];;
+//			for (auto & s : suportes) {
+//			}
+//			
+//			for(int k = 0; k < steps; k++){
+//				
+//				int initialIndex = (suportes.size() / steps) * k;
+//				
+//				for( int i = 0; i < numOfFixtures; i++ ){
+//					int index = (int(contagem) + i+ initialIndex) % fixtures.size();
+//					
+//					
+//					bool ligado = true;
+//					string name = "on_" + c + "_" + ofToString(fixtures[index]->getModelId());
+//					u.uis["ui_" + c].set(name, ligado);
+//					
+//				}
+//			}
+//		}
 	}
 	
 	
@@ -378,8 +472,37 @@ void dmtrFixturesScene() {
 		string & scene = u.uis["ui_" + c].pString["scene_" + c];
 
 		
+		// 28 / 12 / 2017 tentando testar mareh
+		if (scene == "colorPicker") {
+			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
+			ofColor cor;
+			for (auto & f : fixtures) {
+				int index = f->getModelId();
+				//cout << f->getModelId() << endl;
+				cor = pixels.getColor(index * 9, 2);
+
+				f->setChannelByName("red", cor.r);
+				f->setChannelByName("green", cor.g);
+				f->setChannelByName("blue", cor.b);
+			}
+			
+		}
 		
-		if (scene == "contagem") {
+		else if (scene == "color") {
+			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
+			//ofColor cor = ui->pColor["cor"];
+			ofColor cor = getCor(0);
+			for (auto & f : fixtures) {
+				int index = f->getModelId();
+				
+				f->setChannelByName("red", cor.r);
+				f->setChannelByName("green", cor.g);
+				f->setChannelByName("blue", cor.b);
+			}
+
+		
+		}
+		else if (scene == "contagem") {
 			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
 			
 			uiC->pFloat["contagem"] += uiC->pFloat["vel"] + audio * uiC->pFloat["velAudio"] + beat * uiC->pFloat["velBeat"] ;
@@ -433,7 +556,16 @@ void dmtrFixturesScene() {
 		else if (scene == "audioBeat") {
 			string p = uiC->pString["param"];
 			if (p != "") {
-				int v = ofClamp(ofMap(audio * uiC->pFloat["audio"] + beat * uiC->pFloat["beat"], 0, 1, uiC->pFloat["min"], uiC->pFloat["max"]), 0, 255);
+				
+				float a = audio * uiC->pFloat["audio"];
+				float b = beat * uiC->pFloat["beat"];
+				if (uiC->pFloat["audioNeg"]) {
+					a = 255 - (audio * uiC->pFloat["audioNeg"]);
+				}
+				if (uiC->pFloat["beatNeg"]) {
+					b = 255 - (beat * uiC->pFloat["beatNeg"]);
+				}
+				int v = ofClamp(ofMap(a + b, 0, 1, uiC->pFloat["min"], uiC->pFloat["max"]), 0, 255);
 				u.uis["ui_" + c].set(p, v);
 			}
 		}
@@ -541,28 +673,31 @@ void dmtrFixturesScene() {
 		}
 		
 		else if (scene == "noise") {
-			float fatorTempo = uiC->pFloat["fatorTempo"];
-			float fatorIndex = uiC->pFloat["fatorIndex"];
-//			float min = uiC->pFloat["min"];
-//			float max = uiC->pFloat["max"];
 			
-			float valMiddle		= uiC->pFloat["val"];
-			float amplitude = uiC->pFloat["amplitude"];
-			
-			{
-				string p = uiC->pString["param"];
+			for (int a=0; a<2; a++) {
+				string aa = ofToString(a);
+				float fatorTempo = uiC->pFloat["fatorTempo" + aa];
+				float fatorIndex = uiC->pFloat["fatorIndex" + aa];
+	//			float min = uiC->pFloat["min"];
+	//			float max = uiC->pFloat["max"];
 				
-				//cout << fatorIndex << endl;
-				if (p != "") {
-					
-					for (auto & f : mOfxx().getFixturesWithDefinitionName(c)) {
-						//cout << fatorIndex * (float) f->getModelId() << endl;
-						float val = ofNoise(fatorIndex * (float) f->getModelId(), ofGetElapsedTimef() * fatorTempo);
-						float min = valMiddle - amplitude;
-						float max = valMiddle + amplitude;
-						float v = ofMap(val, 0, 1, min, max);
-						v = ofClamp(v, 0, 255);
-						f->setChannelByName(p, int(v));
+				float valMiddle		= uiC->pFloat["val" + aa];
+				float amplitude = uiC->pFloat["amplitude" + aa];
+				
+				{
+					string p = uiC->pString["param" + aa];
+					//cout << fatorIndex << endl;
+					if (p != "") {
+						
+						for (auto & f : mOfxx().getFixturesWithDefinitionName(c)) {
+							//cout << fatorIndex * (float) f->getModelId() << endl;
+							float val = ofNoise(fatorIndex * (float) f->getModelId(), ofGetElapsedTimef() * fatorTempo);
+							float min = valMiddle - amplitude;
+							float max = valMiddle + amplitude;
+							float v = ofMap(val, 0, 1, min, max);
+							v = ofClamp(v, 0, 255);
+							f->setChannelByName(p, int(v));
+						}
 					}
 				}
 			}
@@ -600,7 +735,7 @@ vector <string> masterControl;
 void dmtrFixturesUIEvent(uiEv & e) {
 	
 	//cout << e.name << endl;
-	if (e.name == "Beat!") {
+	if (e.name == "Beat") {
 		isBeat = true;
 	}
 	
