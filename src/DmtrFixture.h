@@ -1,18 +1,19 @@
 ofix::ofxOpenFixture mOfxx;
 ofImage imageFixture;
 
-
 vector <string> fixturesWithUI;
-
-
 bool isBeat = false;
-
 
 // 6 de outubro de 2017, babel, inserindo artnets aqui dentro
 ofxArtnet artnets;
 string computerIP, artnetIP;
 
 ofPixels pixels;
+
+// REMOVER
+ofxDmtrUI3 *uiDmx = &u.uis["uiDmx"];
+ofxDmtrUI3 *uiDmxC = &u.uis["uisceneDmx"];
+
 
 //--------------------------------------------------------------
 void dmtrFixturesSetup() {
@@ -29,13 +30,14 @@ void dmtrFixturesSetup() {
 	// ISIS Computer
 	if (!ofFile::doesFileExist("/Users/dimitre")) {
 		computerIP = "192.168.0.11";
+		cout << "artnets setup, computer ip = " + computerIP << endl;
 		cout << "isis computer" << endl;
 	} else {
+		cout << "artnets setup, computer ip = " + computerIP << endl;
 		cout << "dimi computer" << endl;
 	}
 	
 	
-	cout << "artnets setup, computer ip = " + computerIP << endl;
 	artnets.setup(computerIP.c_str());
 
 	
@@ -114,14 +116,9 @@ void dmtrFixturesSetup() {
 //			}
 
 
-
-			
-			
 			fixturesWithUI.push_back(model);
 			
 			string uiname = "ui_" + model;
-			
-			
 			
 			string uiSmall = "";
 			if( defPtr->hasCustomPropretie( "ui" ) ){
@@ -246,13 +243,10 @@ void dmtrFixturesSetup() {
 		cout << "TILTINVERT" << endl;
     }
     
-    
-    
-	
-	
     imageFixture.allocate(20,26, OF_IMAGE_COLOR);
 	imageFixture.setColor(ofColor(0, 0,0, 0));
-	
+	imageFixture.getTexture().setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
+
 //	for (int a=0; a<10; a++) {
 //		uiDmx->templateVectorString["individual"].push_back("int	pan_"+ofToString(a)+"	0 255 0");
 //	}
@@ -318,7 +312,6 @@ void dmtrFixturesDraw() {
 	ofPushMatrix();
 	ofTranslate(10,0);
 
-	imageFixture.getTexture().setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
 	for (int a=0; a<universes.size(); a++) {
         ofSetColor ( dmtrFixturesDrawColors[a%5] );
         auto universe = universes[a];
@@ -813,6 +806,7 @@ void dmtrFixturesUIEvent(uiEv & e) {
     
 	else if (e.tag == "on") {
 		string eventPrefix = ofSplitString( e.name, "_")[0];
+		//cout << e.name << endl;
 		if( eventPrefix == "on") {
 			auto modelNameId = ofSplitString( e.name, "_");
 			std::string modelName = modelNameId[1];
