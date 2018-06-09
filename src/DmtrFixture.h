@@ -17,10 +17,12 @@ ofxDmtrUI3 *uiDmxC = &u.uis["uisceneDmx"];
 
 //--------------------------------------------------------------
 void dmtrFixturesSetup() {
-	for (auto & l : u.textToVector("artnet_ip.txt")) {
+	for (auto & l : u.textToVector("_dmx/artnet_ip.txt")) {
 		vector <string> col = ofSplitString(l, "	");
-		if (col[0] == "computer") {
+//		if (col[0] == "computer") {
+		if (col[0] == "computer" && ofFile::doesFileExist("/Users/"+col[2])) {
 			computerIP = col[1];
+			cout << "artnets setup, computer ip = " + computerIP << " :: user = " << col[2] << endl;
 		}
 		else if (col[0] == "artnet") {
 			artnetIP = col[1];
@@ -28,14 +30,14 @@ void dmtrFixturesSetup() {
 	}
 	
 	// ISIS Computer
-	if (!ofFile::doesFileExist("/Users/dimitre")) {
-		computerIP = "192.168.0.11";
-		cout << "artnets setup, computer ip = " + computerIP << endl;
-		cout << "isis computer" << endl;
-	} else {
-		cout << "artnets setup, computer ip = " + computerIP << endl;
-		cout << "dimi computer" << endl;
-	}
+//	if (!ofFile::doesFileExist("/Users/dimitre")) {
+//		computerIP = "192.168.0.11";
+//		cout << "artnets setup, computer ip = " + computerIP << endl;
+//		cout << "isis computer" << endl;
+//	} else {
+//		cout << "artnets setup, computer ip = " + computerIP << endl;
+//		cout << "dimi computer" << endl;
+//	}
 	
 	
 	artnets.setup(computerIP.c_str());
@@ -59,9 +61,6 @@ void dmtrFixturesSetup() {
 	uiDmx->templateVectorString["palco"] = mOfxx().getPropertiesWithPropertiesValue("group", "palco");
 	uiDmx->templateVectorString["general"] = mOfxx().getFixtureNamesWithPropertiesValue("group", "general");
 	
-    
-    
-    
 	{
 		auto models =  mOfxx().getFixturesWithProperties("model");
 		for (auto & modelGroup : models) {
@@ -193,6 +192,7 @@ void dmtrFixturesSetup() {
 			
 			if( defPtr->hasCustomPropretie("colorpicker") || defPtr->hasCustomPropretie("colorPicker") ){
 				u.uis[uiname].templateVectorString["colorPicker"].push_back("colorHsv	cor");
+				u.uis[uiname].templateVectorString["colorPicker"].push_back("bool	useWhite	1");
 			}
 				
             // -------
@@ -329,6 +329,30 @@ void dmtrFixturesDraw() {
 }
 
 
+//--------------------------------------------------------------
+void dmtrFixturesDraw2() {
+	// IMAGES INSPECTOR
+	auto universes = mOfxx().getUniverses();
+	
+	ofPushStyle();
+	ofPushMatrix();
+	ofTranslate(10,0);
+	
+	for (int a=0; a<universes.size(); a++) {
+		ofSetColor ( dmtrFixturesDrawColors[a%5] );
+		auto universe = universes[a];
+		renderUniverse(&imageFixture, *universe );
+		float scale = 3;
+		float scaledSizeX = imageFixture.getWidth() * scale;
+		float scaledSizeY = imageFixture.getHeight() * scale;
+		float y = 0;
+		imageFixture.draw( (scaledSizeX + 10 )* a, y, imageFixture.getWidth() * scale, imageFixture.getHeight() * scale );
+		ofDrawBitmapString( ofToString( universes[a]->universeIndex),  (scaledSizeX + 10 )* a,  y );
+	}
+	ofPopMatrix();
+	ofPopStyle();
+}
+
 
 //void getChannelFromInterface(FixtureRef f, ) {
 void setChannelFromInterface(string modelName, string channel, int modelId = -1) {
@@ -400,6 +424,8 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 
 //--------------------------------------------------------------
 void dmtrFixturesScene() {
+	
+	audio = beat = updown;
 	
 	{
 		string & scene = u.uis["uiDmx"].pString["sceneDmx"];
@@ -641,8 +667,8 @@ void dmtrFixturesScene() {
 		else if (scene == "audioOn") {
 			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
 			float ligados = audio * fixtures.size();
+			
 			for (auto & f : fixtures) {
-				//if (f->get)
 				bool val = false;
 				if (f->getModelId() < ligados) {
 					val = true;
@@ -671,9 +697,6 @@ void dmtrFixturesScene() {
 				string aa = ofToString(a);
 				float fatorTempo = uiC->pFloat["fatorTempo" + aa];
 				float fatorIndex = uiC->pFloat["fatorIndex" + aa];
-	//			float min = uiC->pFloat["min"];
-	//			float max = uiC->pFloat["max"];
-				
 				float valMiddle		= uiC->pFloat["val" + aa];
 				float amplitude = uiC->pFloat["amplitude" + aa];
 				
@@ -683,13 +706,18 @@ void dmtrFixturesScene() {
 					if (p != "") {
 						
 						for (auto & f : mOfxx().getFixturesWithDefinitionName(c)) {
+							//cout << c << endl;
 							//cout << fatorIndex * (float) f->getModelId() << endl;
 							float val = ofNoise(fatorIndex * (float) f->getModelId(), ofGetElapsedTimef() * fatorTempo);
 							float min = valMiddle - amplitude;
 							float max = valMiddle + amplitude;
 							float v = ofMap(val, 0, 1, min, max);
-							v = ofClamp(v, 0, 255);
-							f->setChannelByName(p, int(v));
+							v = int(ofClamp(v, 0, 255));
+//							cout << p << endl;
+//							cout << v << endl;
+							f->setChannelByName(p, v);
+							//u.uis["ui_" + c].set(p, v);
+
 						}
 					}
 				}
@@ -779,11 +807,9 @@ void dmtrFixturesUIEvent(uiEv & e) {
 	
 	// TAG
 	if (e.tag == "color") {
-
 		string name = e.kind == SLIDER2D ? e.name : ofSplitString(e.name, "_")[0];
-		
 		ofColor cor = u.uis[e.uiname].pColor[name];
-
+		
 		u.uis[e.uiname].set("red",			cor.r);
 		u.uis[e.uiname].set("green",		cor.g);
 		u.uis[e.uiname].set("blue",			cor.b);
@@ -798,11 +824,22 @@ void dmtrFixturesUIEvent(uiEv & e) {
 		u.uis[e.uiname].set("cyan",			255-cor.r);
 		u.uis[e.uiname].set("magenta",		255-cor.g);
 		u.uis[e.uiname].set("yellow",		255-cor.b);
-	
-	
+		
+		// aqui eh o rgbw
+		if (u.uis[e.uiname].pBool["useWhite"]) {
+			float h, s, b;
+			cor.getHsb(h, s, b);
+			float invertSat = (255 - s) / 255.0;
+			float sat = (s) / 255.0;
+			
+			u.uis[e.uiname].set("red",			cor.r * sat);
+			u.uis[e.uiname].set("green",		cor.g * sat);
+			u.uis[e.uiname].set("blue",			cor.b * sat);
+			u.uis[e.uiname].set("white",			255 * invertSat);
+		} else {
+			u.uis[e.uiname].set("white",		0);
+		}
 	}
-    
-    
     
 	else if (e.tag == "on") {
 		string eventPrefix = ofSplitString( e.name, "_")[0];

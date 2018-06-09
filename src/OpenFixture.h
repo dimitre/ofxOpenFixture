@@ -15,18 +15,13 @@
 #include "Fixture.h"
 #include "Utils.h"
 namespace openfixture {
-    
-    
     class OpenFixture{
         
         class Scheme{
-            
-            
-            
         };
         
         public:
-        
+		
         ofix::Definition* createDefinitionFromScheme(const std::vector< std::vector<std::string>>& schema, bool channelStartsAtOne = true ){
             
             ofix::Definition* def = nullptr;
