@@ -438,7 +438,7 @@ namespace openfixture {
                 else if (std::find(mBlackoutMask.begin(), mBlackoutMask.end(), a) != mBlackoutMask.end() && ! mDefPtr->ignoreMasterFade) {
 					target = mChannels[a] * masterFade;
 
-				} else if( mBlackoutMask.size() == 0 && !mDefPtr->ignoreMasterFade) {
+				} else if ( mBlackoutMask.size() == 0 && !mDefPtr->ignoreMasterFade) {
 					target = mChannels[a] * masterFade;
                     
                 }else{

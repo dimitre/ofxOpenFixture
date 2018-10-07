@@ -13,10 +13,13 @@ ofPixels pixels;
 // REMOVER
 ofxDmtrUI3 *uiDmx = &u.uis["uiDmx"];
 ofxDmtrUI3 *uiDmxC = &u.uis["uisceneDmx"];
+ofFbo *fboDmxInspector = &u.mapFbos["fboDmxInspector"];;
+ofFbo *fboDmxScene = &u.mapFbos["fboDmxScene"];;
 
 
 //--------------------------------------------------------------
 void dmtrFixturesSetup() {
+	
 	for (auto & l : u.textToVector("_dmx/artnet_ip.txt")) {
 		vector <string> col = ofSplitString(l, "	");
 //		if (col[0] == "computer") {
@@ -41,11 +44,9 @@ void dmtrFixturesSetup() {
 	
 	
 	artnets.setup(computerIP.c_str());
-
 	
 	mOfxx.loadFixturesDefFromFolder("_dmx/_fixtures/");
 	mOfxx.loadUniversesDefFromFolder("_dmx/_universes/");
-    
     mOfxx.setUniversesProps();
     
 	auto palcoFixtures = mOfxx().getFixturesWithProperties("group");
@@ -174,19 +175,24 @@ void dmtrFixturesSetup() {
 			for(  auto name : defPtr->getChannelNames(mode ) ){
 				if (name != "null") {
 					u.uis[uiname].templateVectorString["channels"].push_back( name );
-					
 					if( defPtr->hasCustomPropretie("audio") ){
-						
 						auto audioChannels = defPtr->getCustomPropreties()["audio"];
-						
 						for( auto& ac : audioChannels ){
-							
 							if( stoi(ac) == defPtr->getChannelIndexByName(name) ){
 								u.uis[uiname].templateVectorString["channels"].push_back( name + "Audio" );
 							}
-							
 						}
 					}
+					if( defPtr->hasCustomPropretie("beat") ){
+						auto audioChannels = defPtr->getCustomPropreties()["beat"];
+						for( auto& ac : audioChannels ){
+							if( stoi(ac) == defPtr->getChannelIndexByName(name) ){
+								u.uis[uiname].templateVectorString["channels"].push_back( name + "Beat" );
+							}
+						}
+					}
+
+				
 				}
 			}
 			
@@ -229,12 +235,22 @@ void dmtrFixturesSetup() {
 	
 	// removi dia 13 de setembro
 	//mOfxx().setChannelInGroup( 0, 255, "palco" );
+
 	
+	// pqp nao consegui fazer isso rodar.
+//	cout << "aqui roda" << endl;
+//	{
+//	auto models = mOfxx().getFixturesWithProperties("ignoremasterfade");
+//		for (auto & modelGroup : models) {
+//			modelGroup->setIgnoreMasterFade(true);
+//			auto defPtr = mOfxx().getDefinitionByName(modelGroup.first);
+//		}
+//	}
 	
+
 	
 	for (auto & p : mOfxx().getFixturesWithPropertiesValue("paninvert", "1")) {
 		p->panInvert = true;
-		
 		cout << "PANINVERT" << endl;
 	}
     
@@ -262,37 +278,51 @@ void dmtrFixturesUpdate() {
 	// easing
 	mOfxx().update();
 	
+	// tentando flipar o segundo fixture de laser
+//	auto defs = mOfxx().getDefinitionsWithProperties("flip");
+//	for( auto& def : defs){
+//		string ui_name = "ui_" + def->getModelName();
+//		auto channels = def->getCustomPropreties()["flip"];
+//		for(int i = 0; i < channels.size(); i++){
+//			int channel = stoi(channels[i]);
+//			auto channel_name = def->getChannelNameByIndex(channel, 0);
+//			//cout << channel_name << endl;
+//			for( auto fix : def->getFixtures() ){
+//				if (channel_name == "rotate" && fix->getModelId() == 0) {
+//					int sliderValue = u.uis[ui_name].pInt[channel_name] + 64;
+//					fix->setChannel(channel, sliderValue );
+//				}
+//			}
+//		}
+//	}
+
 	auto defs = mOfxx().getDefinitionsWithProperties("audio");
 
 	// AQUI SO ATUALIZA AS FIXTURES COM AUDIO
 	for( auto& def : defs){
 		auto channels = def->getCustomPropreties()["audio"];
+		
 		string ui_name = "ui_" + def->getModelName();
 		for( auto fix : def->getFixtures() ){
 			for(int i = 0; i < channels.size(); i++){
 				int channel = stoi(channels[i]);
 				auto channel_name = def->getChannelNameByIndex(channel, 0);
 				int sliderValue = u.uis[ui_name].pInt[channel_name];
-				int sliderAudioValue = u.uis[ui_name].pInt[channel_name + "Audio"];
-				fix->setChannel(channel, sliderValue + sliderAudioValue * updown);
+				float sliderAudioValue = updown * (float)u.uis[ui_name].pInt[channel_name + "Audio"];
+				float sliderBeatValue = beat * (float)u.uis[ui_name].pInt[channel_name + "Beat"];
+				int valTotal = sliderValue + sliderAudioValue + sliderBeatValue;
+				fix->setChannel(channel, valTotal );
 			}
 		}
 	}
 	
 	
-	
-	
 	if (u.pBool["sendArtnet"] && artnets.status == 2) {
 		auto universes = mOfxx().getUniverses();
-		
 		for (int a=0; a<universes.size(); a++) {
 			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
 			// mandar apenas o universo size ao inves dos 512?
-			
-			//cout << universo << endl;
-			//cout << mOfxx().getUniverses()[a]->getBuffer().data() << endl;
 			artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
-			//cout << "universo send :: " << universo << endl;
 		}
 	}
 }
@@ -336,17 +366,22 @@ void dmtrFixturesDraw2() {
 	
 	ofPushStyle();
 	ofPushMatrix();
-	ofTranslate(10,0);
+	//ofTranslate(10,0);
 	
+	float scale = 3;
+	float scaledSizeX = imageFixture.getWidth() * scale;
+	float scaledSizeY = imageFixture.getHeight() * scale;
+
+	float h = fboDmxInspector->getHeight();
 	for (int a=0; a<universes.size(); a++) {
-		ofSetColor ( dmtrFixturesDrawColors[a%5] );
+		ofSetColor(255);
+		//ofSetColor ( dmtrFixturesDrawColors[a%5] );
 		auto universe = universes[a];
 		renderUniverse(&imageFixture, *universe );
-		float scale = 3;
-		float scaledSizeX = imageFixture.getWidth() * scale;
-		float scaledSizeY = imageFixture.getHeight() * scale;
 		float y = 0;
-		imageFixture.draw( (scaledSizeX + 10 )* a, y, imageFixture.getWidth() * scale, imageFixture.getHeight() * scale );
+		float x = (scaledSizeX*2 + 5 ) * a;
+		imageFixture.draw(x , y, imageFixture.getWidth() * scale, imageFixture.getHeight() * scale );
+		imageFixture.draw(x + scaledSizeX + 10, y - h, imageFixture.getWidth() * scale, imageFixture.getHeight() * scale );
 		ofDrawBitmapString( ofToString( universes[a]->universeIndex),  (scaledSizeX + 10 )* a,  y );
 	}
 	ofPopMatrix();
@@ -394,6 +429,8 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 		for( auto& fix :  fixtures ){
 			int v = val;
 			
+			
+			
 //			if( !ui->pBool["on_" + modelName + "_" + ofToString( fix->getModelId() ) ] ){
 //				v = 0;
 //			}
@@ -425,7 +462,7 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 //--------------------------------------------------------------
 void dmtrFixturesScene() {
 	
-	audio = beat = updown;
+	//audio = beat = updown;
 	
 	{
 		string & scene = u.uis["uiDmx"].pString["sceneDmx"];

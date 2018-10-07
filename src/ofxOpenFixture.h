@@ -78,56 +78,55 @@ namespace openfixture{
         }
         
         void loadFixturesDefFromFolder( std::string folder_path = "_dmx/_fixtures/" ){
-            ofDirectory dir;
-            dir.open( folder_path );
-            for( int i = 0; i < dir.listDir(); i++  ){
-                
-                ofFile file = dir.getFile(i);
-                
-                //cout << file.getExtension()  << std::endl;
-                
-                if( file.getExtension() == "txt" ){
-                    mOfix.createDefinitionFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
-                }
-                
-                
-                else if( file.getExtension() == "json" ){
-                    Definition* def = createDefinitionFromJson( ofBufferFromFile( dir.getPath(i) ).getText() ) ;
+			if (ofFile::doesFileExist(folder_path)) {
+				ofDirectory dir;
+				dir.open( folder_path );
+				for( int i = 0; i < dir.listDir(); i++  ){
+					
+					ofFile file = dir.getFile(i);
+					
+					//cout << file.getExtension()  << std::endl;
+					
+					if( file.getExtension() == "txt" ){
+						mOfix.createDefinitionFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
+					}
+					
+					
+					else if( file.getExtension() == "json" ){
+						Definition* def = createDefinitionFromJson( ofBufferFromFile( dir.getPath(i) ).getText() ) ;
 
-                    std::string additionalInfoFile = ofSplitString(dir.getFile(i).getFileName(), ".")[0] + ".txt";
-                    
-                    ofFile extensionFile( ofToDataPath( folder_path + "/extensions/" + additionalInfoFile) );
-                    
-                    if( extensionFile.exists()  ){
-                        
-                        
-                        
-                        std::vector <std::vector <std::string>> scheme = ofix::loadSchemeFromString( ofBufferFromFile( extensionFile.path() ).getText() );
-                        
-                        
-                        mOfix.appendSchemeToDefinition( def, scheme );
-                        
-                    }
-                    
-                }
-            }
-            
+						std::string additionalInfoFile = ofSplitString(dir.getFile(i).getFileName(), ".")[0] + ".txt";
+						
+						ofFile extensionFile( ofToDataPath( folder_path + "/extensions/" + additionalInfoFile) );
+						
+						if( extensionFile.exists()  ){
+							
+							
+							
+							std::vector <std::vector <std::string>> scheme = ofix::loadSchemeFromString( ofBufferFromFile( extensionFile.path() ).getText() );
+							
+							
+							mOfix.appendSchemeToDefinition( def, scheme );
+							
+						}
+						
+					}
+				}
+			}
         }
         
         
         void loadUniversesDefFromFolder( std::string folder_path = "_dmx/_universes/"  ){
-            
-            ofDirectory dir;
-            dir.open( folder_path );
-            
-            for( int i = 0; i < dir.listDir(); i++  ){
-                
-                ofFile file(dir.getPath(i));
-                
-                string uniname = ofSplitString(file.getFileName(), ".")[0] ;
-                
-                mOfix.createUniverseFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ), uniname );
-            }
+			if (ofFile::doesFileExist(folder_path)) {
+
+				ofDirectory dir;
+				dir.open( folder_path );
+				for( int i = 0; i < dir.listDir(); i++  ){
+					ofFile file(dir.getPath(i));
+					string uniname = ofSplitString(file.getFileName(), ".")[0] ;
+					mOfix.createUniverseFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ), uniname );
+				}
+			}
         }
         
         
