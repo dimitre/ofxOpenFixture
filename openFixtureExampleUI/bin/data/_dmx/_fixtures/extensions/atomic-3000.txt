@@ -1,0 +1,4 @@
+[atomic-3000]
+mode=2
+ui=smallNewCol
+blackout=null

@@ -1,0 +1,6 @@
+label	BEAT
+int	beamsOn	0 20 1
+bool	everyFrame	0
+
+int	amplitude	0 127 90
+int	centro	0 255 127

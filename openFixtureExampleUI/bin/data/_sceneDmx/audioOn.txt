@@ -1,0 +1,3 @@
+label	AudioOn
+float	audioOn	0 1 .5
+float	beatOn	0 1 .5

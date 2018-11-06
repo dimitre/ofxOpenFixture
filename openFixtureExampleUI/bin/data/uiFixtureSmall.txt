@@ -1,0 +1,42 @@
+#keepSettings	1
+loadSave	0
+sliderWidth	180
+beginTemplate	label
+label	{$vectorString}
+flowHoriz
+bang	allOn
+bang	allOff
+flowVert
+
+endTemplate
+#==============
+beginTemplate	on
+tag	on
+#label	LIST ON
+togglesListNoLabel	{$vectorString}	1	10
+tag	
+endTemplate
+#==============
+beginTemplate	channels
+tag	channels
+label	CHANNELS
+intsList	{$vectorString}	0 255 0
+tag	
+endTemplate
+#==============
+beginTemplate	individual
+tag	individual
+{$lineString}
+tag	
+endTemplate
+#==============
+beginTemplate	colorPicker
+{$lineString}
+endTemplate
+#==============
+template	label	1
+template	on	1
+
+template	channels	1
+template	individual	1
+template	colorPicker	1

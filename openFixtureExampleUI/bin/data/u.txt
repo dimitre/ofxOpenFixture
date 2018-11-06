@@ -1,0 +1,19 @@
+font	_fonts/mono0755.ttf	6
+sliderWidth	220
+sliderHeight	16
+radio	presetsFolder	1 2 3 4 5 6 7
+fps
+presets
+int	fboX	0 1000 0
+int	fboY	0 1000 0
+float	fboScale	0 1 1
+radio	fboScale_shortcut	.2 .25 .5 .75 1
+addUIDown	ui
+addUIDown	uiscene
+
+#FIXTURES
+uiTag	dmx
+addUI	uiDmx2	disableLoadSave
+addUIDown	uiDmx
+addUIDown	uisceneDmx
+template	customUIs

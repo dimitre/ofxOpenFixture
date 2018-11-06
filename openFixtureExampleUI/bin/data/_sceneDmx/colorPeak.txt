@@ -1,0 +1,10 @@
+label	COLORPEAK
+float	threshold	0 1 .9
+label	color
+colorHsv	cor
+label	colorPeak
+colorHsv	corPeak
+
+bool	tilt
+float	tilt	0 255 127
+float	tiltBeat	0 30 0

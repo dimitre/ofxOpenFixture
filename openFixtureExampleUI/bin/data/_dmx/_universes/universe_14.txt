@@ -1,0 +1,405 @@
+#universe 14
+[robeSpot2500]
+channel = 1
+group = GSpotTruss
+
+[robeSpot2500]
+channel = 25
+group = GSpotTruss
+
+[robeSpot2500]
+channel = 49
+group = GSpotTruss
+
+[robeSpot2500]
+channel = 73
+group = GSpotTruss
+
+[robeSpot2500]
+channel = 97
+group = GSpotTruss
+
+[MartinRushMH3]
+channel = 121
+group = GSpotTruss
+
+[MartinRushMH3]
+channel = 140
+group = GSpotTruss
+
+[MartinRushMH3]
+channel = 159
+group = GSpotTruss
+
+[MartinRushMH3]
+channel = 178
+group = GSpotTruss
+
+[MartinRushMH3]
+channel = 197
+group = GStageFloor,DS
+
+[MartinRushMH3]
+channel = 216
+group = GStageFloor,DS
+
+[MartinRushMH3]
+channel = 235
+group = GStageFloor,DS
+
+[MartinRushMH3]
+channel = 254
+group = GStageFloor,DS
+
+[MartinRushMH3]
+channel = 273
+group = GStageFloor,DS
+
+[MartinRushMH3]
+channel = 292
+group = GStageFloor,DS
+
+[Blinder 6x 2nd]
+channel = 351
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 352
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 353
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 354
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 355
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 356
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 357
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 358
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 359
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 360
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 361
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 362
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 363
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 364
+group = GLX5
+
+[Blinder 6x 1st]
+channel = 365
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 366
+group = GLX5
+
+[Blinder 6x 2nd]
+channel = 367
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 368
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 369
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 370
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 371
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 372
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 373
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 374
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 375
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 376
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 377
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 378
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 379
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 380
+group = GLX4
+
+[Blinder 6x 1st]
+channel = 381
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 382
+group = GLX4
+
+[Blinder 6x 2nd]
+channel = 383
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 384
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 385
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 386
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 387
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 388
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 389
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 390
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 391
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 392
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 393
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 394
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 395
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 396
+group = GLX3
+
+[Blinder 6x 1st]
+channel = 397
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 398
+group = GLX3
+
+[Blinder 6x 2nd]
+channel = 399
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 400
+group = GLX2
+
+[Blinder 6x 2nd]
+channel = 401
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 402
+group = GLX2
+
+[Blinder 6x 2nd]
+channel = 403
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 404
+group = GLX2
+
+[Blinder 6x 2nd]
+channel = 405
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 406
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 407
+group = GLX2
+
+[Blinder 6x 2nd]
+channel = 408
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 409
+group = GLX2
+
+[Blinder 6x 2nd]
+channel = 410
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 411
+group = GLX2
+
+[Blinder 6x 2nd]
+channel = 412
+group = GLX2
+
+[Blinder 6x 1st]
+channel = 413
+group = GLX2
+
+[Blinder 6x 2nd]
+channel = 414
+group = GLX2
+
+[Blinder 4x - Line]
+channel = 415
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 416
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 417
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 418
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 419
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 420
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 421
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 422
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 423
+group = GLX1
+
+[Blinder 4x - Line]
+channel = 424
+group = GLX1
+
+[Blinder 4x]
+channel = 435
+group = GScreen,SR
+
+[Blinder 4x]
+channel = 436
+group = GScreen,SR
+
+[Blinder 4x]
+channel = 437
+group = GScreen,SR
+
+[Blinder 4x]
+channel = 438
+group = GScreen,SR
+
+[Blinder 4x]
+channel = 439
+group = GScreen,SR
+
+[Blinder 4x]
+channel = 440
+group = GScreen,SR
+
+[Blinder 4x]
+channel = 441
+group = GScreen,SL
+
+[Blinder 4x]
+channel = 442
+group = GScreen,SL
+
+[Blinder 4x]
+channel = 443
+group = GScreen,SL
+
+[Blinder 4x]
+channel = 444
+group = GScreen,SL
+
+[Blinder 4x]
+channel = 445
+group = GScreen,SL
+
+[Blinder 4x]
+channel = 446
+group = GScreen,SL
+

@@ -1,0 +1,7 @@
+bw	1
+margin	10
+sliderMargin	1
+sliderWidth	200
+#sliderHeight	20
+sliderHeight	16
+opacity	220

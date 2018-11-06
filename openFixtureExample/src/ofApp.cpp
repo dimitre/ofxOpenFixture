@@ -27,8 +27,8 @@ void ofApp::update(){
 		for (int a=0; a<universes.size(); a++) {
 			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
 			auto dmxData = mOfxx().getUniverses()[a]->getBuffer().data();
-			pixels.
-			memcpy(pixels.getData(), mOfxx().getUniverses()[a]->getBuffer().data(), 512);
+			//pixels.
+			//memcpy(pixels.getData(), mOfxx().getUniverses()[a]->getBuffer().data(), 512);
 			//pixels.set((unsigned char *)dmxData);
 			//pixels.set(dmxData);
 			

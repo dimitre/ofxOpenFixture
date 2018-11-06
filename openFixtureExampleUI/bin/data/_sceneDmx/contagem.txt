@@ -1,0 +1,5 @@
+label	BEAT
+float	liga	0 1 .2
+float	quantidade	0 1 .1
+int	c_step	0 10 1
+float	vel	-.5 .5 .3 	audioBeat

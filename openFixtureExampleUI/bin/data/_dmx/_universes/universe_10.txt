@@ -1,0 +1,61 @@
+#universe 10
+[MartinRushMH7]
+channel = 1
+group = GRunway,SL
+
+[MartinRushMH7]
+channel = 22
+group = GRunway,SL
+
+[MartinRushMH7]
+channel = 43
+group = GRunway,SL
+
+[MartinRushMH7]
+channel = 64
+group = GRunway,SL
+
+[MartinRushMH7]
+channel = 85
+group = GRunway,SL
+
+[MartinRushMH7]
+channel = 106
+group = GRunway,SL
+
+[MartinRushMH7]
+channel = 127
+group = GRunway,SL
+
+[MartinRushMH7]
+channel = 148
+group = GRunway,SL
+
+[MartinRushMH3]
+channel = 169
+group = GRunway,SL
+
+[MartinRushMH3]
+channel = 188
+group = GRunway,SL
+
+[MartinRushMH3]
+channel = 207
+group = GRunway,SL
+
+[MartinRushMH3]
+channel = 226
+group = GRunway,SL
+
+[MartinRushMH3]
+channel = 245
+group = GRunway,SL
+
+[MartinRushMH3]
+channel = 264
+group = GRunway,SL
+
+[MartinRushMH3]
+channel = 283
+group = GRunway,SL
+

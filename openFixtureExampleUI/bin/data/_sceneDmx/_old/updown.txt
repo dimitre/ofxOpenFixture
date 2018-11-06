@@ -1,0 +1,4 @@
+label	UPDOWN
+float	min	0 255 0
+float	max	0 255 0
+radio	param	pan tilt dimmer Pan Tilt Dimmer

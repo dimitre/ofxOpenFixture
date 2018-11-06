@@ -1,0 +1,105 @@
+#universe 6
+[At3000]
+channel = 1
+group = GSide,SR,Low
+
+[At3000]
+channel = 5
+group = GSide,SR,Low
+
+[At3000]
+channel = 9
+group = GSide,SR,Low
+
+[At3000]
+channel = 13
+group = GSide,SR,Low
+
+[At3000]
+channel = 17
+group = GSide,SR,High
+
+[At3000]
+channel = 21
+group = GSide,SR,High
+
+[At3000]
+channel = 25
+group = GSide,SR,High
+
+[At3000]
+channel = 29
+group = GSide,SR,High
+
+[MacAura]
+channel = 33
+group = GSide,SR,Low
+
+[MacAura]
+channel = 58
+group = GSide,SR,Low
+
+[MacAura]
+channel = 83
+group = GSide,SR,Low
+
+[MacAura]
+channel = 108
+group = GSide,SR,Low
+
+[MacAura]
+channel = 133
+group = GSide,SR,High
+
+[MacAura]
+channel = 158
+group = GSide,SR,High
+
+[MacAura]
+channel = 183
+group = GSide,SR,High
+
+[MacAura]
+channel = 208
+group = GSide,SR,High
+
+[MartinRushMH3]
+channel = 233
+group = GSide,SR,Low
+
+[MartinRushMH3]
+channel = 252
+group = GSide,SR,Low
+
+[MartinRushMH3]
+channel = 271
+group = GSide,SR,Low
+
+[MartinRushMH3]
+channel = 290
+group = GSide,SR,Low
+
+[MartinRushMH3]
+channel = 309
+group = GSide,SR,Low
+
+[MartinRushMH3]
+channel = 328
+group = GSide,SR,High
+
+[MartinRushMH3]
+channel = 347
+group = GSide,SR,High
+
+[MartinRushMH3]
+channel = 366
+group = GSide,SR,High
+
+[MartinRushMH3]
+channel = 385
+group = GSide,SR,High
+
+[MartinRushMH3]
+channel = 404
+group = GSide,SR,High
+

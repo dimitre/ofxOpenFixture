@@ -1,0 +1,3 @@
+label	NO
+bool	allOn	0
+bool	allOff	0

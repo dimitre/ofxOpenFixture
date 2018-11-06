@@ -330,6 +330,7 @@ void dmtrFixturesUpdate() {
 	}
 	
 	
+#ifdef USE_ARTNET_LEGACY
 	if (u.pBool["sendArtnet"] && artnets.status == 2) {
 		auto universes = mOfxx().getUniverses();
 		for (int a=0; a<universes.size(); a++) {
@@ -338,6 +339,7 @@ void dmtrFixturesUpdate() {
 			artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
 		}
 	}
+#endif
 }
 
 
@@ -808,6 +810,31 @@ void dmtrFixturesUIEvent(uiEv & e) {
 	//cout << e.name << endl;
 	if (e.name == "Beat") {
 		isBeat = true;
+	}
+	
+	if (e.uiname == "uiDmx2") {
+		if (e.name == "blinders") {
+			for (auto & s : { "ui_blinder4x", "ui_blinder4x-line", "ui_blinder6x1st", "ui_blinder6x2nd" }) {
+				u.uis[ s].set("dimmer", e.i);
+			}
+		}
+		else if (e.name == "strobo") {
+			u.uis["ui_at3000"].set("intensity", e.i);
+		}
+	}
+	
+	if (e.tag == "batchonoff") {
+		//toggle_martinrushmh7_runway
+		vector<string> partes = ofSplitString(e.uiname, "_");
+		string model = partes[1];
+		string group = e.name;
+		
+		for (auto & f : mOfxx().getFixturesByModel(model)) {
+			string props = ofJoinString(f->customProp["group"], ",");
+			if (ofIsStringInString(props, group)) {
+				u.uis["ui_" + model].set("on_"+model+"_" + ofToString(f->getModelId()), (bool)e.b);
+			}
+		}
 	}
 	
 	

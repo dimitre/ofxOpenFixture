@@ -1,0 +1,6 @@
+[MacAura]
+colorPicker=1
+mode=1
+# este nao parece estar certo mas por enquanto deixar assim
+blackout=2,21
+null=8,15,16,17,18,19

@@ -1,0 +1,3 @@
+label	RANDOM
+float	liga	0 1 .2
+float	fatorTempo	.01 10 1.0

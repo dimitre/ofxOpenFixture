@@ -1,0 +1,121 @@
+#universe 2
+[At3000]
+channel = 1
+group = GLX4
+
+[At3000]
+channel = 5
+group = GLX4
+
+[At3000]
+channel = 9
+group = GLX4
+
+[At3000]
+channel = 13
+group = GLX4
+
+[At3000]
+channel = 17
+group = GLX4
+
+[At3000]
+channel = 21
+group = GLX4
+
+[ViperAirFX]
+channel = 25
+group = GLX4
+
+[ViperAirFX]
+channel = 45
+group = GLX4
+
+[ViperAirFX]
+channel = 65
+group = GLX4
+
+[ViperAirFX]
+channel = 85
+group = GLX4
+
+[ViperAirFX]
+channel = 105
+group = GLX4
+
+[ViperAirFX]
+channel = 125
+group = GLX4
+
+[ViperAirFX]
+channel = 145
+group = GLX4
+
+[ViperAirFX]
+channel = 165
+group = GLX4
+
+[MacViperWash]
+channel = 185
+group = GLX4
+
+[MacViperWash]
+channel = 203
+group = GLX4
+
+[MacViperWash]
+channel = 221
+group = GLX4
+
+[MacViperWash]
+channel = 239
+group = GLX4
+
+[MacViperWash]
+channel = 257
+group = GLX4
+
+[MacViperWash]
+channel = 275
+group = GLX4
+
+[MacViperWash]
+channel = 293
+group = GLX4
+
+[MacViperWash]
+channel = 311
+group = GLX4
+
+[MacViperWash]
+channel = 329
+group = GLX4
+
+[MacViperWash]
+channel = 347
+group = GLX4
+
+[MartinRushMH3]
+channel = 365
+group = GLX4
+
+[MartinRushMH3]
+channel = 384
+group = GLX4
+
+[MartinRushMH3]
+channel = 403
+group = GLX4
+
+[MartinRushMH3]
+channel = 422
+group = GLX4
+
+[MartinRushMH3]
+channel = 441
+group = GLX4
+
+[MartinRushMH3]
+channel = 460
+group = GLX4
+

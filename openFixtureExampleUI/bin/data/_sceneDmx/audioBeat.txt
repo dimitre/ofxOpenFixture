@@ -1,0 +1,12 @@
+label	AUDIOBEAT
+float	min	-200 255 0
+float	max	0 555 255
+radio	param	pan tilt dimmer beamdimmer auradimmer
+
+#bool	audioInvert	0
+#bool	beatInvert	0
+float	audio	0 2 1
+float	beat	0 2 0
+
+float	audioNeg	0 2 0
+float	beatNeg	0 2 0

@@ -1,0 +1,149 @@
+#universe 13
+[MartinRushMH2]
+channel = 1
+group = GFascia
+
+[MartinRushMH2]
+channel = 13
+group = GFascia
+
+[MartinRushMH2]
+channel = 25
+group = GFascia
+
+[MartinRushMH2]
+channel = 37
+group = GFascia
+
+[MartinRushMH2]
+channel = 49
+group = GFascia
+
+[MartinRushMH2]
+channel = 61
+group = GFascia
+
+[MartinRushMH2]
+channel = 73
+group = GFascia
+
+[MartinRushMH2]
+channel = 85
+group = GFascia
+
+[MartinRushMH2]
+channel = 97
+group = GFascia
+
+[MartinRushMH2]
+channel = 109
+group = GFascia
+
+[MartinRushMH2]
+channel = 121
+group = GFascia
+
+[MartinRushMH2]
+channel = 133
+group = GFascia
+
+[MartinRushMH2]
+channel = 145
+group = GFascia
+
+[MartinRushMH2]
+channel = 157
+group = GFascia
+
+[MartinRushMH2]
+channel = 169
+group = GFascia
+
+[MartinRushMH2]
+channel = 181
+group = GFascia
+
+[MartinRushMH2]
+channel = 193
+group = GFascia
+
+[MartinRushMH2]
+channel = 205
+group = GFascia
+
+[MartinRushMH2]
+channel = 217
+group = GFascia
+
+[MartinRushMH2]
+channel = 229
+group = GFascia
+
+[MartinRushMH2]
+channel = 241
+group = GFascia
+
+[MartinRushMH2]
+channel = 253
+group = GFascia
+
+[MartinRushMH2]
+channel = 265
+group = GFascia
+
+[MartinRushMH2]
+channel = 277
+group = GFascia
+
+[MartinRushMH2]
+channel = 289
+group = GFascia
+
+[MartinRushMH2]
+channel = 301
+group = GFascia
+
+[MartinRushMH2]
+channel = 313
+group = GFascia
+
+[MartinRushMH2]
+channel = 325
+group = GFascia
+
+[MartinRushMH2]
+channel = 337
+group = GFascia
+
+[MartinRushMH2]
+channel = 349
+group = GFascia
+
+[MartinRushMH2]
+channel = 361
+group = GFascia
+
+[MartinRushMH2]
+channel = 373
+group = GFascia
+
+[MartinRushMH2]
+channel = 385
+group = GFascia
+
+[MartinRushMH2]
+channel = 397
+group = GFascia
+
+[MartinRushMH2]
+channel = 409
+group = GFascia
+
+[MartinRushMH2]
+channel = 421
+group = GFascia
+
+[MartinRushMH2]
+channel = 433
+group = GFascia
+

@@ -1,0 +1,4 @@
+[Blinder 6x 1st]
+1=dimmer
+blackout=null
+ui=small

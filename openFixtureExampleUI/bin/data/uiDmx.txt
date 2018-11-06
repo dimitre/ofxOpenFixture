@@ -1,0 +1,45 @@
+label	DMX GERAL
+float	easyIn	0 10 3
+float	easyOut	0 10 3
+
+sliderWidth	225
+beginTemplate	grupos
+label	LISTA GRUPOS
+togglesList	{$vectorString}
+
+endTemplate
+#================================
+beginTemplate	equipamentos
+label	LISTA EQUIPAMENTOS
+flowHoriz
+radioitemList	{$vectorString}
+#togglesList	{$vectorString}
+flowVert
+endTemplate
+#================================
+beginTemplate	palco
+label	LISTA PALCO
+floatsList	{$vectorString}	0 255 127
+
+endTemplate
+#================================
+beginTemplate	general
+label	GENERAL XXX
+floatsList	{$vectorString}	0 255 0
+
+endTemplate
+#================================
+label	DMX STATIC (NO PRESETS)
+
+tag	masterControl
+template	equipamentos	1
+
+tag	masterControl
+int	pan	0 255 127
+int	tilt	0 255 127
+#int	dimmer	0 255 127
+colorHsv	cor
+tag	
+
+
+scene	sceneDmx	_sceneDmxAll

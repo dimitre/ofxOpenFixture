@@ -1,0 +1,4 @@
+[ViperAirFX]
+colorPicker=1
+blackout=1
+null=10,9,8

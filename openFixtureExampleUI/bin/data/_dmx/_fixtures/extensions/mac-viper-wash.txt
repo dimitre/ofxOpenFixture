@@ -1,0 +1,3 @@
+[MacViperWash]
+null=9,10,11,18
+colorpicker=1

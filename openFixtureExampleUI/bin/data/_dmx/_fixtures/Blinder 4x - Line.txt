@@ -1,0 +1,4 @@
+[Blinder 4x - Line]
+1=dimmer
+blackout=null
+ui=small

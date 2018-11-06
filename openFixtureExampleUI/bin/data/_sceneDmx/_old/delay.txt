@@ -1,0 +1,12 @@
+label	Delay
+
+bool	position	0
+
+int	panDelay	0 255 127
+int	tiltDelay	0 255 127
+int	delayTime	0 1000 200
+bang	resetDelay	0
+
+bool	random	0
+int	center	0 255 127
+int	amplitude	0 127 80

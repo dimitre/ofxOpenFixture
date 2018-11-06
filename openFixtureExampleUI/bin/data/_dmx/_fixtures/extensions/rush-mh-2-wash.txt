@@ -1,0 +1,3 @@
+[martinrushmh2]
+colorPicker=1
+description=Texto Detalhe opcional

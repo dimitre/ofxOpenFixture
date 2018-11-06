@@ -1,0 +1,16 @@
+label	NOISE
+float	fatorTempo	.001 3 .5
+float	fatorIndex	0 .25 .01
+float	val	0 255 127
+float	amplitude	0 200 60
+#float	min	-150 255 0
+#float	max	0 405 255
+radio	param	pan tilt dimmer
+
+
+
+float	min	-200 255 0
+float	max	0 555 255
+radio	paramAudio	pan tilt dimmer
+float	audio	0 1 0
+float	beat	0 1 0

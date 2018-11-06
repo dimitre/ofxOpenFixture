@@ -1,0 +1,6 @@
+label	ALTERNATE
+
+radio	fixture1	_no macaura macviperwash at3000 robespot2500 martinrushmh2 martinrushmh3 martinrushmh7 martinviperperf viperairfx
+radio	fixture2	_no macaura macviperwash at3000 robespot2500 martinrushmh2 martinrushmh3 martinrushmh7 martinviperperf viperairfx
+bool	audio	1
+float	threshold	0 1 .5

@@ -1,0 +1,105 @@
+#universe 1
+[At3000]
+channel = 1
+group = GLX5
+
+[At3000]
+channel = 5
+group = GLX5
+
+[At3000]
+channel = 9
+group = GLX5
+
+[At3000]
+channel = 13
+group = GLX5
+
+[At3000]
+channel = 17
+group = GLX5
+
+[At3000]
+channel = 21
+group = GLX5
+
+[At3000]
+channel = 25
+group = GLX5
+
+[ViperAirFX]
+channel = 29
+group = GLX5
+
+[ViperAirFX]
+channel = 49
+group = GLX5
+
+[ViperAirFX]
+channel = 69
+group = GLX5
+
+[ViperAirFX]
+channel = 89
+group = GLX5
+
+[ViperAirFX]
+channel = 109
+group = GLX5
+
+[ViperAirFX]
+channel = 129
+group = GLX5
+
+[ViperAirFX]
+channel = 149
+group = GLX5
+
+[ViperAirFX]
+channel = 169
+group = GLX5
+
+[ViperAirFX]
+channel = 189
+group = GLX5
+
+[ViperAirFX]
+channel = 209
+group = GLX5
+
+[MacViperWash]
+channel = 229
+group = GLX5
+
+[MacViperWash]
+channel = 247
+group = GLX5
+
+[MacViperWash]
+channel = 265
+group = GLX5
+
+[MacViperWash]
+channel = 283
+group = GLX5
+
+[MacViperWash]
+channel = 301
+group = GLX5
+
+[MacViperWash]
+channel = 319
+group = GLX5
+
+[MacViperWash]
+channel = 337
+group = GLX5
+
+[MacViperWash]
+channel = 355
+group = GLX5
+
+[MacViperWash]
+channel = 373
+group = GLX5
+

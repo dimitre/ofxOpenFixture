@@ -1,0 +1,8 @@
+label	DMX NO PRESET
+
+float	faderDmx	0 1 1
+
+int	blinders	0 255 0
+int	strobo	0 255 0
+
+bang	getColor	0

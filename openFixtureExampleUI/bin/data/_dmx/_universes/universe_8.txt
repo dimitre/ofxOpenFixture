@@ -1,0 +1,65 @@
+#universe 8
+[MartinRushMH7]
+channel = 193
+group = GRearofStage,US
+
+[MartinRushMH7]
+channel = 214
+group = GRearofStage,US
+
+[MartinRushMH7]
+channel = 235
+group = GRearofStage,US
+
+[MartinRushMH7]
+channel = 256
+group = GRearofStage,US
+
+[MartinRushMH7]
+channel = 277
+group = GRearofStage,US
+
+[MartinRushMH7]
+channel = 298
+group = GRearofStage,US
+
+[MartinRushMH7]
+channel = 319
+group = GRearofStage,US
+
+[MartinRushMH7]
+channel = 340
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 361
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 379
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 397
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 415
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 433
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 451
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 469
+group = GRearofStage,US
+
+[MacViperWash]
+channel = 487
+group = GRearofStage,US
+

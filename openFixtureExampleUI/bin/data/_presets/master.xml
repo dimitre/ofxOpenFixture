@@ -1,0 +1,12 @@
+<ofxDmtrUIVersion>4.000000000</ofxDmtrUIVersion>
+<element>
+    <string>
+        <presetsFolder>1</presetsFolder>
+        <allPresets>0</allPresets>
+    </string>
+    <f>
+        <fboX>0.000000000</fboX>
+        <fboY>0.000000000</fboY>
+        <fboScale>1.000000000</fboScale>
+    </f>
+</element>

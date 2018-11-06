@@ -1,0 +1,89 @@
+#universe 11
+[MartinRushMH3]
+channel = 1
+group = GFascia
+
+[MartinRushMH3]
+channel = 20
+group = GFascia
+
+[MartinRushMH3]
+channel = 39
+group = GFascia
+
+[MartinRushMH3]
+channel = 58
+group = GFascia
+
+[MartinRushMH3]
+channel = 77
+group = GFascia
+
+[MartinRushMH3]
+channel = 96
+group = GFascia
+
+[MartinRushMH3]
+channel = 115
+group = GFascia
+
+[MartinRushMH3]
+channel = 134
+group = GFascia
+
+[MartinRushMH3]
+channel = 153
+group = GFascia
+
+[MartinRushMH3]
+channel = 172
+group = GFascia
+
+[MartinRushMH3]
+channel = 191
+group = GFascia
+
+[MartinRushMH3]
+channel = 210
+group = GFascia
+
+[MartinRushMH3]
+channel = 229
+group = GFascia
+
+[MartinRushMH3]
+channel = 248
+group = GFascia
+
+[MartinRushMH3]
+channel = 267
+group = GFascia
+
+[MartinRushMH3]
+channel = 286
+group = GFascia
+
+[MartinRushMH3]
+channel = 305
+group = GFascia
+
+[MartinRushMH3]
+channel = 324
+group = GFascia
+
+[MartinRushMH3]
+channel = 343
+group = GFascia
+
+[MartinRushMH3]
+channel = 362
+group = GFascia
+
+[MartinRushMH3]
+channel = 381
+group = GFascia
+
+[MartinRushMH3]
+channel = 400
+group = GFascia
+

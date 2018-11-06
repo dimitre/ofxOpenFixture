@@ -1,0 +1,21 @@
+label	LFO
+bool	palco	1
+bool	pista	1
+
+bool	pan	1
+float	panLFO	0 10 1
+float	panAmplitude	0 1 .5
+float	panDefasagem	0 3 .2
+
+float	panCenter	0 255 127
+newcol
+
+
+
+
+bool	tilt	1
+float	tiltLFO	0 10 1
+float	tiltAmplitude	0 1 .5
+float	tiltDefasagem	0 3 .2
+
+float	tiltCenter	0 255 127
