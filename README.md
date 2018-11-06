@@ -5,7 +5,9 @@ https://github.com/OpenLightingProject/open-fixture-library
 
 https://open-fixture-library.org/
 
-
+example uses ofxArtnet (Legacy branch)
+https://github.com/hiroyuki/ofxArtnet/
+I'll try to update to master soon.
 
 It can add native OFL fixture files in JSON format, or accept its own format. similar to configparser.
 ```
