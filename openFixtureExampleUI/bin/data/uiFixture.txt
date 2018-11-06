@@ -6,7 +6,6 @@ bang	allOn
 bang	allOff
 bang	blackout
 flowVert
-
 endTemplate
 #==============
 beginTemplate	on
@@ -47,7 +46,6 @@ flowVert
 
 endTemplate
 #==============
-
 template	label	1
 template	groups	1
 template	on	1
