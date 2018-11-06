@@ -17,6 +17,12 @@
 #include <iostream>
 
 
+// LINUX npisanti
+#include <memory>
+#include <algorithm>
+#include <cstring>
+
+
 namespace openfixture {
     
     class Fixture;

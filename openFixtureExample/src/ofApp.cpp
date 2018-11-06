@@ -1,8 +1,11 @@
 #include "ofApp.h"
 
+ofPixels pixels;
+
+
 //--------------------------------------------------------------
 void ofApp::setup(){
-	artnets.setup(computerIP.c_str());
+	artnets.setup(artnetIP.c_str());
 	mOfxx.loadFixturesDefFromFolder("_dmx/_fixtures/");
 	mOfxx.loadUniversesDefFromFolder("_dmx/_universes/");
 	mOfxx.setUniversesProps();
@@ -16,12 +19,25 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if (artnets.status == 2)
+	
+	//if (artnets.status == 2)
 	{
 		auto universes = mOfxx().getUniverses();
+		
 		for (int a=0; a<universes.size(); a++) {
 			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
-			artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
+			auto dmxData = mOfxx().getUniverses()[a]->getBuffer().data();
+			pixels.
+			memcpy(pixels.getData(), mOfxx().getUniverses()[a]->getBuffer().data(), 512);
+			//pixels.set((unsigned char *)dmxData);
+			//pixels.set(dmxData);
+			
+//			for (int i=0; i<512; i++) {
+//				pixels.set(i, dmxData[i]);
+//				pixels.set
+//			}
+//			pixels.set(mOfxx().getUniverses()[a]->getBuffer().data());
+			artnets.sendArtnet(pixels, universo);
 		}
 	}
 }
