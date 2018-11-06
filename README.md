@@ -1,15 +1,18 @@
 # ofxOpenFixture
 
-Never finished addon. Development started in June 2017 by Henrique. It was meant to load native fixture files from the great project 
+Openframeworks addon to handle DMX Fixtures using Open Fixture Library. 
 https://github.com/OpenLightingProject/open-fixture-library
-
 https://open-fixture-library.org/
+Development started in June 2017 by @Hperigo
 
-example uses ofxArtnet (Legacy branch)
+Example uses ofxArtnet (Legacy branch), it will be updated to actual library soon.
 https://github.com/hiroyuki/ofxArtnet/
-I'll try to update to master soon.
 
-It can add native OFL fixture files in JSON format, or accept its own format. similar to configparser.
+And second example uses ofxDmtrUI3
+https://github.com/dimitre/ofxDmtrUI3/
+
+It can use OFL fixture files in JSON format, or accept its own format similar to configparser.
+
 ```
 [laser]
 1 = mode
