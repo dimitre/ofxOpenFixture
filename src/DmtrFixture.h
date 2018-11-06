@@ -1,3 +1,14 @@
+/*
+
+You don't really need this file.
+We use as a dirty piece of code to make it run together with a graphical interface.
+it doesn't even worth to read.
+
+*/
+
+
+
+
 ofix::ofxOpenFixture mOfxx;
 
 // 6 de outubro de 2017, babel, inserindo artnets aqui dentro
