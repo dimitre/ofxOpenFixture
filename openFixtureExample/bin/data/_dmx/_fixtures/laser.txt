@@ -1,0 +1,17 @@
+[laser]
+1 = mode
+2 = color
+3 = shape
+4 = offY
+5 = offX
+6 = scaleY
+7 = scaleX
+8 = rotate
+9 = estraga
+10 = scale
+11 = dots
+
+ui = smallnewcol
+audio = 2, 3, 4, 9, 11, 12
+beat = 2, 3, 4, 9, 11, 12
+flip = 7

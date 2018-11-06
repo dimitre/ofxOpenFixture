@@ -1,12 +1,14 @@
 ofix::ofxOpenFixture mOfxx;
+
+// 6 de outubro de 2017, babel, inserindo artnets aqui dentro
+ofxArtnet artnets;
+string computerIP, artnetIP;
+
 ofImage imageFixture;
 
 vector <string> fixturesWithUI;
 bool isBeat = false;
 
-// 6 de outubro de 2017, babel, inserindo artnets aqui dentro
-ofxArtnet artnets;
-string computerIP, artnetIP;
 
 ofPixels pixels;
 

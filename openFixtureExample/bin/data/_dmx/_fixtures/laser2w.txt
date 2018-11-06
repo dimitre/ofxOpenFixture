@@ -1,0 +1,17 @@
+[laser2w]
+1 = mode
+2 = shape
+3 = rotate
+4 = scaleX
+5 = scaleY
+6 = offX
+7 = offY
+8 = scale
+9 = scale2
+10 = constroi
+11 = dots
+12 = color
+
+ui = small
+audio = 1, 2, 3, 7, 11, 12
+beat = 1, 2, 3, 7, 11, 12

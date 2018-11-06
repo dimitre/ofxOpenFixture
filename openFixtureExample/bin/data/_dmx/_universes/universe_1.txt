@@ -1,0 +1,8 @@
+[laser2w]
+channel = 1
+
+[laser]
+channel = 20
+
+[laserb]
+channel = 40
