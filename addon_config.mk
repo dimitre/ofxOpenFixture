@@ -7,4 +7,4 @@ meta:
 
 common:
 	# dependencies with other addons, a list of them separated by spaces 
-	ADDON_DEPENDENCIES = ofxJSON
+	ADDON_DEPENDENCIES = ofxJSON 
