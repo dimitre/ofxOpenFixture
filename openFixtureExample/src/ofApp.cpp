@@ -6,6 +6,7 @@ ofPixels pixels;
 //--------------------------------------------------------------
 void ofApp::setup(){
 	artnets.setup(artnetIP.c_str());
+	
 	mOfxx.loadFixturesDefFromFolder("_dmx/_fixtures/");
 	mOfxx.loadUniversesDefFromFolder("_dmx/_universes/");
 	mOfxx.setUniversesProps();
@@ -19,24 +20,12 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	
-	//if (artnets.status == 2)
 	{
 		auto universes = mOfxx().getUniverses();
-		
 		for (int a=0; a<universes.size(); a++) {
 			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
 			auto dmxData = mOfxx().getUniverses()[a]->getBuffer().data();
-			//pixels.
-			//memcpy(pixels.getData(), mOfxx().getUniverses()[a]->getBuffer().data(), 512);
-			//pixels.set((unsigned char *)dmxData);
-			//pixels.set(dmxData);
-			
-//			for (int i=0; i<512; i++) {
-//				pixels.set(i, dmxData[i]);
-//				pixels.set
-//			}
-//			pixels.set(mOfxx().getUniverses()[a]->getBuffer().data());
+			pixels.setFromExternalPixels(dmxData, 30, 30, 1);
 			artnets.sendArtnet(pixels, universo);
 		}
 	}

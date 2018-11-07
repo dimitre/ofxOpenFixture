@@ -340,6 +340,22 @@ void dmtrFixturesUpdate() {
 		}
 	}
 #endif
+	
+	
+	//if (u.pBool["sendArtnet"])
+	ofPixels pixels;
+	{
+		auto universes = mOfxx().getUniverses();
+		for (int a=0; a<universes.size(); a++) {
+			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
+			
+			// mandar apenas o universo size ao inves dos 512?
+			auto dmxData = mOfxx().getUniverses()[a]->getBuffer().data();
+			pixels.setFromExternalPixels(dmxData, 30, 30, 1);
+			artnets.sendArtnet(pixels, universo);
+			//artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
+		}
+	}
 }
 
 
