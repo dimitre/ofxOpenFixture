@@ -4,7 +4,7 @@
 	<bool />
 	<string>
 		<presetsFolder>1</presetsFolder>
-		<allPresets>0</allPresets>
+		<allPresets>1</allPresets>
 	</string>
 	<point />
 	<int>

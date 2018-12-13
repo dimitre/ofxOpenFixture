@@ -12,7 +12,7 @@ it doesn't even worth to read.
 ofix::ofxOpenFixture mOfxx;
 
 // 6 de outubro de 2017, babel, inserindo artnets aqui dentro
-ofxArtnet artnets;
+
 string computerIP, artnetIP;
 
 ofImage imageFixture;
@@ -28,6 +28,17 @@ ofxDmtrUI3 *uiDmx = &u.uis["uiDmx"];
 ofxDmtrUI3 *uiDmxC = &u.uis["uisceneDmx"];
 ofFbo *fboDmxInspector = &u.mapFbos["fboDmxInspector"];;
 ofFbo *fboDmxScene = &u.mapFbos["fboDmxScene"];;
+
+//XAXA
+
+#define USE_ARTNET_LEGACY 1
+
+#ifdef USE_ARTNET_LEGACY
+ofxArtnet artnets;
+#else
+ofxArtnetSender artnet;
+#endif
+
 
 
 //--------------------------------------------------------------
@@ -45,18 +56,19 @@ void dmtrFixturesSetup() {
 		}
 	}
 	
-	// ISIS Computer
-//	if (!ofFile::doesFileExist("/Users/dimitre")) {
-//		computerIP = "192.168.0.11";
-//		cout << "artnets setup, computer ip = " + computerIP << endl;
-//		cout << "isis computer" << endl;
-//	} else {
-//		cout << "artnets setup, computer ip = " + computerIP << endl;
-//		cout << "dimi computer" << endl;
-//	}
+	
+	computerIP = "192.168.1.201";
+	artnetIP = "192.168.1.200";
+
 	
 	
+#ifdef USE_ARTNET_LEGACY
 	artnets.setup(computerIP.c_str());
+	cout << "artnets setup " << computerIP << endl;
+#else
+	artnet.setup(artnetIP.c_str());
+#endif
+	
 	
 	mOfxx.loadFixturesDefFromFolder("_dmx/_fixtures/");
 	mOfxx.loadUniversesDefFromFolder("_dmx/_universes/");
@@ -289,6 +301,8 @@ void dmtrFixturesSetup() {
 void dmtrFixturesUpdate() {
 	//cout << "dmtrFixturesUpdate()" << endl;
 	// easing
+	
+	//cout << "dmtrFixturesUpdate" << endl;
 	mOfxx().update();
 	
 	// tentando flipar o segundo fixture de laser
@@ -331,19 +345,24 @@ void dmtrFixturesUpdate() {
 	
 	
 #ifdef USE_ARTNET_LEGACY
-	if (u.pBool["sendArtnet"] && artnets.status == 2) {
+	
+	
+	if (u.pBool["sendArtnet"] && artnets.status == 2)
+	{
+		
+		//cout << "sending" << endl;
 		auto universes = mOfxx().getUniverses();
 		for (int a=0; a<universes.size(); a++) {
 			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
 			// mandar apenas o universo size ao inves dos 512?
+			//cout << universo << endl;
+			//cout << mOfxx().getUniverses()[a]->getBuffer().data() << endl;
 			artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
 		}
 	}
-#endif
-	
-	
-	//if (u.pBool["sendArtnet"])
-	ofPixels pixels;
+#else
+	if (u.pBool["sendArtnet"])
+	//ofPixels pixels;
 	{
 		auto universes = mOfxx().getUniverses();
 		for (int a=0; a<universes.size(); a++) {
@@ -351,11 +370,15 @@ void dmtrFixturesUpdate() {
 			
 			// mandar apenas o universo size ao inves dos 512?
 			auto dmxData = mOfxx().getUniverses()[a]->getBuffer().data();
-			pixels.setFromExternalPixels(dmxData, 30, 30, 1);
-			artnets.sendArtnet(pixels, universo);
+			
+			//artnet.se
+			
+			artnet.sendArtnet(dmxData, 512);
+			// artnets.sendArtnet(pixels, universo);
 			//artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
 		}
 	}
+#endif
 }
 
 
@@ -393,6 +416,9 @@ void dmtrFixturesDraw() {
 //--------------------------------------------------------------
 void dmtrFixturesDraw2() {
 	// IMAGES INSPECTOR
+	
+	//cout << "dmtrFixturesDraw2" << endl;
+	
 	auto universes = mOfxx().getUniverses();
 	
 	ofPushStyle();
@@ -597,6 +623,7 @@ void dmtrFixturesScene() {
 			auto contagem = fmod(uiC->pFloat["contagem"] , fixtures.size()) + uiC->pInt["c_step"];
 			
             
+			//cout << contagem << endl;
 			
             int numOfFixtures =  uiC->pFloat["quantidade"] * fixtures.size();
             int lastIndex = (int(contagem) - numOfFixtures) % fixtures.size();
@@ -761,7 +788,7 @@ void dmtrFixturesScene() {
 		
 		else if (scene == "noise") {
 			
-			for (int a=0; a<2; a++) {
+			for (int a=0; a<3; a++) {
 				string aa = ofToString(a);
 				float fatorTempo = uiC->pFloat["fatorTempo" + aa];
 				float fatorIndex = uiC->pFloat["fatorIndex" + aa];
@@ -771,18 +798,15 @@ void dmtrFixturesScene() {
 				{
 					string p = uiC->pString["param" + aa];
 					//cout << fatorIndex << endl;
+					
 					if (p != "") {
-						
+						//cout << mOfxx().getFixturesWithDefinitionName(c).size() << endl;
 						for (auto & f : mOfxx().getFixturesWithDefinitionName(c)) {
-							//cout << c << endl;
-							//cout << fatorIndex * (float) f->getModelId() << endl;
 							float val = ofNoise(fatorIndex * (float) f->getModelId(), ofGetElapsedTimef() * fatorTempo);
 							float min = valMiddle - amplitude;
 							float max = valMiddle + amplitude;
 							float v = ofMap(val, 0, 1, min, max);
 							v = int(ofClamp(v, 0, 255));
-//							cout << p << endl;
-//							cout << v << endl;
 							f->setChannelByName(p, v);
 							//u.uis["ui_" + c].set(p, v);
 
@@ -814,10 +838,7 @@ void dmtrFixturesScene() {
 }
 
 
-
-
 vector <string> masterControl;
-
 
 
 //--------------------------------------------------------------
