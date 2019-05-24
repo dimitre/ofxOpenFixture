@@ -55,10 +55,15 @@ void dmtrFixturesSetup() {
 			artnetIP = col[1];
 		}
 	}
+
+	computerIP = "192.168.0.11";
+	if (ofFile::doesFileExist("/Users/d")) {
+		computerIP = "192.168.0.10";
+	}
 	
 	
-	computerIP = "192.168.1.201";
-	artnetIP = "192.168.1.200";
+	
+	artnetIP = "192.168.0.30";
 
 	
 	
@@ -354,9 +359,10 @@ void dmtrFixturesUpdate() {
 		auto universes = mOfxx().getUniverses();
 		for (int a=0; a<universes.size(); a++) {
 			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
+
 			// mandar apenas o universo size ao inves dos 512?
-			//cout << universo << endl;
-			//cout << mOfxx().getUniverses()[a]->getBuffer().data() << endl;
+//			cout << universo << endl;
+//			cout << mOfxx().getUniverses()[a]->getBuffer().data() << endl;
 			artnets.sendDmx(artnetIP, 0, universo, mOfxx().getUniverses()[a]->getBuffer().data(), 512);
 		}
 	}
