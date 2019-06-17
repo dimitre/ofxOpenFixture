@@ -40,9 +40,30 @@ ofxArtnetSender artnet;
 #endif
 
 
+void dmtrFixturesPostSetup() {
+//	for (auto & x : u.uis) {
+//		cout << x.first << endl;
+//		cout << x.second.UINAME << endl;
+//	}
+	
+	fboDmxInspector->allocate(uiDmx->getElement("fbo")->rect.width, uiDmx->getElement("fbo")->rect.height, GL_RGBA );
+	fboDmxInspector->begin();
+	ofClear(0,255);
+	fboDmxInspector->end();
+	((mult*)uiDmx->getElement("fbo"))->setFbo(*fboDmxInspector);
+	((mult*)uiDmx->getElement("fbo"))->alwaysRedraw = true;
+	
+	fboDmxScene->allocate(uiDmx->getElement("fboDmxScene")->rect.width, uiDmx->getElement("fboDmxScene")->rect.height, GL_RGBA );
+	fboDmxScene->begin();
+	ofClear(0,255);
+	fboDmxScene->end();
+	((mult*)uiDmx->getElement("fboDmxScene"))->setFbo(*fboDmxScene);
+	((mult*)uiDmx->getElement("fboDmxScene"))->alwaysRedraw = true;
+}
 
 //--------------------------------------------------------------
 void dmtrFixturesSetup() {
+	cout << "dmtrFixturesSetup!" << endl;
 	
 	for (auto & l : u.textToVector("_dmx/artnet_ip.txt")) {
 		vector <string> col = ofSplitString(l, "	");
@@ -145,7 +166,7 @@ void dmtrFixturesSetup() {
 //				
 //			}
 
-
+			//cout << model << endl;
 			fixturesWithUI.push_back(model);
 			
 			string uiname = "ui_" + model;
@@ -156,15 +177,15 @@ void dmtrFixturesSetup() {
 			}
 			
 			if (uiSmall == "small") {
-				u.templateUI["customUIs"].push_back("addUIDown	"+uiname+"	text:uiFixtureSmall");
+				u.templateUI["customUIs"].push_back("addUIDown	"+uiname+"	text:_dmx/uiFixtureSmall");
 			}
 			else if (uiSmall == "smallnewcol") {
-				u.templateUI["customUIs"].push_back("addUI	"+uiname+"	text:uiFixtureSmall");
+				u.templateUI["customUIs"].push_back("addUI	"+uiname+"	text:_dmx/uiFixtureSmall");
 			}
 			
 			
 			else  {
-				u.templateUI["customUIs"].push_back("addUI	"+uiname+"	text:uiFixture");
+				u.templateUI["customUIs"].push_back("addUI	"+uiname+"	text:_dmx/uiFixture");
 				u.templateUI["customUIs"].push_back("addUIDown	uiscene_"+model+"");
 			}
 			
@@ -304,6 +325,10 @@ void dmtrFixturesSetup() {
 
 //--------------------------------------------------------------
 void dmtrFixturesUpdate() {
+	
+	
+	
+	
 	//cout << "dmtrFixturesUpdate()" << endl;
 	// easing
 	
@@ -355,10 +380,11 @@ void dmtrFixturesUpdate() {
 	if (u.pBool["sendArtnet"] && artnets.status == 2)
 	{
 		
-		//cout << "sending" << endl;
 		auto universes = mOfxx().getUniverses();
 		for (int a=0; a<universes.size(); a++) {
 			int universo = mOfxx().getUniverses()[a]->universeIndex - 1;
+
+			//cout << "sending universe :: " << universo << endl;
 
 			// mandar apenas o universo size ao inves dos 512?
 //			cout << universo << endl;
@@ -385,6 +411,11 @@ void dmtrFixturesUpdate() {
 		}
 	}
 #endif
+	
+	fboDmxInspector->begin();
+	ofClear(40,255);
+	dmtrFixturesDraw2();
+	fboDmxInspector->end();
 }
 
 
@@ -423,7 +454,6 @@ void dmtrFixturesDraw() {
 void dmtrFixturesDraw2() {
 	// IMAGES INSPECTOR
 	
-	//cout << "dmtrFixturesDraw2" << endl;
 	
 	auto universes = mOfxx().getUniverses();
 	
@@ -525,7 +555,7 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 //--------------------------------------------------------------
 void dmtrFixturesScene() {
 	
-	//audio = beat = updown;
+	audio = beat = updown;
 	
 	{
 		string & scene = u.uis["uiDmx"].pString["sceneDmx"];
@@ -590,7 +620,7 @@ void dmtrFixturesScene() {
 		ofxDmtrUI3 * uiC = &u.uis["uiscene_" + c];
 		string & scene = u.uis["ui_" + c].pString["scene_" + c];
 
-		
+		//cout << scene << endl;
 		// 28 / 12 / 2017 tentando testar mareh
 		if (scene == "colorPicker") {
 			auto fixtures = mOfxx().getFixturesWithDefinitionName(c);
