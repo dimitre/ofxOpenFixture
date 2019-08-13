@@ -555,7 +555,7 @@ void setChannelFromInterface(string modelName, string channel, int modelId = -1)
 //--------------------------------------------------------------
 void dmtrFixturesScene() {
 	
-	audio = beat = updown;
+	//audio = beat = updown;
 	
 	{
 		string & scene = u.uis["uiDmx"].pString["sceneDmx"];
