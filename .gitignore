@@ -3,4 +3,30 @@
 *.app
 bin/*.app
 
+obj
+*/.vscode/*
+obj/*
+*.zip
+.DS_Store
+*.app
+*.app/*
+*.code-workspace
+*.logicx
+*.xcodeproj
+Makefile
+config.make
+*.plist
+*.xcconfig
+*.mov
+*.mp4
+*.jpg
+*.mkv
+*.wav
+*.aif
+*.aiff
+*.mp3
+*.tif
+*.tiff
+
+*.otf
 
