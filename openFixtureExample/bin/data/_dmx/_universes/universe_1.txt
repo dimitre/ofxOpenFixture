@@ -6,3 +6,9 @@ channel = 20
 
 [laserb]
 channel = 40
+
+[skypanel-s30c]
+channel = 80
+
+[skypanel-s30c]
+channel = 100

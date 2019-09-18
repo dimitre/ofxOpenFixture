@@ -13,11 +13,8 @@ namespace openfixture {
     
     // Definition --------
     uint16_t Definition::getChannelByName(openfixture::Fixture *fixture, const std::string &name){
-        
         int mode = fixture->mode;
-        
         if ( modes[mode].find(name) == modes[mode].end() ) {
-            
             std::cout << "no channel with name: " << name  << " in fixture: " << fixture->getDefinitionPtr()->getModelName()   << std::endl;
             return -1;
         } else {

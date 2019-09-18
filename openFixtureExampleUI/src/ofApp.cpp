@@ -7,7 +7,7 @@ ofPixels pixels;
 void ofApp::setup(){
 	
 	dmtrFixturesSetup();
-	artnets.setup(artnetIP.c_str());
+	artnet.setup(artnetIP.c_str());
 	u.createSoftwareFromText("u.txt");
 	
 	//u.setFbo(*fbo);
@@ -23,7 +23,7 @@ void ofApp::setup(){
 void ofApp::update(){
 	
 	dmtrFixturesUpdate();
-	dmtrFixturesScene();
+	//dmtrFixturesScene();
 }
 
 

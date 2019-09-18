@@ -38,8 +38,8 @@ namespace openfixture {
         
         // STATIC functions ------
         static Definition* createDefinition( const std::string& name_  ){
-            
             std::unique_ptr< Definition > def ( new Definition( name_ ) );
+			//std::cout << "name ::" << name_ << std::endl;
             globalDefinitions[name_] = std::move( def );
             
             return &(*globalDefinitions[name_]);
@@ -146,7 +146,7 @@ namespace openfixture {
             return customPropreties[propName];
         }
         
-        bool hasCustomPropretie( const std::string& propName  ){
+        bool hasCustomProprety( const std::string& propName  ){
             
             if( customPropreties.find( propName ) != customPropreties.end() ){
                 return true;

@@ -9,7 +9,6 @@
 #ifndef OpenFixture_h
 #define OpenFixture_h
 
-
 #endif /* OpenFixture_h */
 
 #include "Fixture.h"
@@ -26,11 +25,10 @@ namespace openfixture {
             
             ofix::Definition* def = nullptr;
             for(auto defString :  schema){
-                
                 std::string defName = defString[0];
+				//cout << "createDefinitionFromScheme :: " << defName << endl;
                 
                 def = ofix::Definition::createDefinition(defName);
-
                 defString.erase(defString.begin());
                 
                 std::map<std::string, int> chanelDef;
@@ -38,34 +36,26 @@ namespace openfixture {
 				bool dimmerExists = false;
                 std::map<std::string, std::vector<std::string>> propsDef;
                 
-                
                 std::vector<std::string> channelsNames;
                 std::vector<int> defaultValues;
                 
-                
                 for( auto channelString : defString ){
-                    
                     auto nameValue = split( channelString, '=' );
-
                     if(  isInteger( nameValue[0] ) ){
                         // add a channel definitiion
                         auto values = split( nameValue[1], ',' );
-
                         if( values.size() > 1 ){
                             // set a default value
                             int v = stoi( values[1] );
                             defaultValues.push_back( v );
-                            
-                        }else{
+                        } else {
                             //if there is no default value, set it to 0
                             defaultValues.push_back( 0 );
                         }
                         
                         int nameValueInt = stoi( nameValue[0] );
-                        
                             if( channelStartsAtOne ){
-                                     nameValueInt -= 1;
-                                
+								nameValueInt -= 1;
                                 if( nameValueInt < 0 ){
                                     nameValueInt = 0;
                                     cout << "error, fixture channel starting at 0 and channelStartsAtOne equals true: " << defName << std::endl;
@@ -82,17 +72,12 @@ namespace openfixture {
                     }
 					
 					else if( nameValue[0] == "blackout" ){
-                        
                         if(nameValue[1] == "null"  ){
-                            
 //                            cout << "ignore master fade: " << defName << endl;
-                            
                             def->setIgnoreMasterFade(true);
-                            
                         }
                         
 						else if ( dimmerExists == false ){
-                        
                             auto values = split( nameValue[1], ',' );
                             for(auto& v : values){
                                 if( isInteger( v ) ){
@@ -105,8 +90,6 @@ namespace openfixture {
                         auto values = split( nameValue[1], ',' );
                         propsDef[ nameValue[0] ] = values;
                     }
-                    
-
                 }
                 
                 def->addMode(chanelDef);
@@ -181,18 +164,13 @@ namespace openfixture {
                         
                     }//eof channel props
                     
-                    else if( nameValue[0] == "blackout" ){
-                        
-                        if(nameValue[1] == "null"  ){
-                            
+                    else if (nameValue[0] == "blackout" ){
+                        if (nameValue[1] == "null"  ){
 //                            cout << "ignore master fade: " << defName << endl;
-                            
                             def->setIgnoreMasterFade(true);
-                            
                         }
                         
                         else if ( dimmerExists == false ){
-                            
                             auto values = split( nameValue[1], ',' );
                             for(auto& v : values){
                                 if( isInteger( v ) ){
@@ -201,26 +179,19 @@ namespace openfixture {
                             }
                         }
                         
-                    }else if( nameValue[0] == "mode" ){
-                     
+                    } else if( nameValue[0] == "mode" ){
                         auto values = split( nameValue[1], ',' );
                         defaultMode = stoi(values[0]);
-                        
                     }
                     
                     else if( nameValue[0] == "null"){
-                        
 //                        cout << "null channels: ";
-                        
                         auto values = split( nameValue[1], ',' );
                         for(auto& v : values){
-                            
                             if( isInteger( v ) ){
-                                
 //                                cout << v << endl;
                                 nullChannels.push_back( stoi(v) -1 );
                             }
-                            
                         }
                     }
                     
@@ -229,8 +200,6 @@ namespace openfixture {
                         auto values = split( nameValue[1], ',' );
                         propsDef[ nameValue[0] ] = values;
                     }
-                    
-                    
                 }
                 
                 if(chanelDef.size())
@@ -249,7 +218,7 @@ namespace openfixture {
                     def->setBlackoutMask(blackoutMask);
 
                 def->setDefaultMode(defaultMode);
-                
+
 //                cout << "defName: "  << defName << endl;
                 def->setNullChannelsMask( nullChannels );
                 
@@ -257,14 +226,10 @@ namespace openfixture {
         }
         
         
-        
         ofix::Universe* createUniverseFromScheme( const std::vector< std::vector<std::string>>& scheme, std::string uniName = "", bool channelStartsAtOne = true){
-
             std::unique_ptr<ofix::Universe> uni( new Universe() );
             for(auto fix : scheme){
-                
                 std::string name = fix[0];
-                
                 //std::cout << name << std::endl;
                 
                 fix.erase(fix.begin());
@@ -272,7 +237,6 @@ namespace openfixture {
                 auto defGlobal = ofix::Definition::getDefinitionByName( name );
                 
                 if( defGlobal == nullptr){
-                    
                     std::cout << "error no definition name: " << name << std::endl;
                     continue;
                 }
@@ -290,15 +254,11 @@ namespace openfixture {
                 int channel = -1;
                 
                 for( auto ff : fix){
-                    
                     auto nameValue = ofix::split( ff, '=' );
-                    
                     std::string name = nameValue[0];
                     
                     if( nameValue[0] == "channel" ){
-
                         int value = stoi( nameValue[1] );
-                        
                         if( channelStartsAtOne == true){
                             value -= 1;
                             
@@ -308,31 +268,27 @@ namespace openfixture {
                             }
                             
                         }
-                        
                         channel = value;
-                    }else if( nameValue[0] == "mode" ){
+                    } else if( nameValue[0] == "mode" ){
                         
                         int value = stoi( nameValue[1] );
                         mFix->setMode(value);
-                        
-                    }else{
-                        
+                    } else {
                         auto values = split(nameValue[1], ',');
                         mFix->customProp[nameValue[0]] = values;
                     }
-                    
                 }
                 
-                if( channel != -1 ){
+                if ( channel != -1 ){
                     uni->setFixture(channel, mFix);
-                }else{
+                } else {
                     uni->appendFixture(mFix);
                 }
                 
                 mFixtures.push_back( mFix );
             }
             
-            if( uniName == "" ){
+            if ( uniName == "" ){
                 uniName = "Universe_" + std::to_string( mUniverses.size() );
             }
             uni->name = uniName;
@@ -341,43 +297,27 @@ namespace openfixture {
             return &(*uni);
         }
         
-        
         void setUniversePropreties( std::string name, std::string ip, int index ){
-            
-            if( mUniverses.find(name) != mUniverses.end() ){
-                
+            if (mUniverses.find(name) != mUniverses.end()){
                 mUniverses[name]->ipAddress = ip;
                 mUniverses[name]->universeIndex = index;
-                
-            }else{
-                
+            } else {
                 cout << "Error, no universe with name: "  << name << endl;
-                
-                
             }
-
-            
         }
 
         //
         std::vector< ofix::FixtureRef > getFixturesWithPropertiesValue( std::string name, std::string value  ){
-
             std::vector< ofix::FixtureRef > result;
-            
             for(auto& fix : mFixtures){
-                
                 if( fix->customProp.find( name ) != fix->customProp.end() ){
-                    
-                    
                     auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), value );
-                    
                     if( exists != fix->customProp[name].end() ){
                         result.push_back( fix );
                     }
                     
                 }
             }
-
             return result;
         }
 		
@@ -389,27 +329,13 @@ namespace openfixture {
 				if( fix->customProp.find( name ) != fix->customProp.end() ){
 					auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), modelName );
 					if( exists != fix->customProp[name].end() ){
-                        
-                        
 						fix->setChannelByName(channelName, val);
 					}
 				}
 			}
 		}
 		
-        
-        
-//        void setFixturesChannelByModelId( string modelName, int id_,  int val ){
-//            
-//            
-//            
-//            
-//        }
-//
-		
-		//std::vector<FixtureRef> getFixtures(){
 
-		
 		Fixture* getFixtureByModelId(string modelName, int id_){
 			auto def = getDefinitionByName(modelName);
 			auto fixtures = def->getFixtures();
@@ -433,8 +359,6 @@ namespace openfixture {
 			auto def = getDefinitionByName(modelName);
 			return def->getFixtures();
 		}
-		
-        
 		
 		// DIMITRE, experimental - 04/09/2017
 		// Funciona mas isso pode ser um lookup table. ponteiros ou algo.
@@ -473,10 +397,8 @@ namespace openfixture {
 		
 		// DIMITRE
 		vector <string> getFixtureNamesWithPropertiesValue(string name, string value) {
-			//cout << "===== BEGIN" << endl;
 			vector <string> result;
 			for(auto& fix : mFixtures){
-				//cout << fix->getDefinitionPtr()->getModelName() << endl;;
 				if( fix->customProp.find( name ) != fix->customProp.end() ){
 					auto exists = std::find( fix->customProp[name].begin(), fix->customProp[name].end(), value );
 					if( exists != fix->customProp[name].end() ){
@@ -491,15 +413,10 @@ namespace openfixture {
 			return result;
 		}
 		
-		
         std::map< std::string, std::vector< ofix::FixtureRef > > getFixturesWithProperties( std::string name ){
-			
             std::map< std::string, std::vector< ofix::FixtureRef > >  result;
-            
             for(auto& fix : mFixtures){
-
                 if( fix->customProp.find( name ) != fix->customProp.end() ){
-                    
                     for( auto& v : fix->customProp[name] ){
                         result[v].push_back( fix );
                     }
@@ -508,79 +425,67 @@ namespace openfixture {
             return result;
         }
         
-        
         FixtureRef getFixtureById( int id_ ){
-            
             for(int i = 0; i < mFixtures.size(); i++){
                 if( mFixtures[i]->getId() == id_ ){
                     return mFixtures[i];
                 }
             }
-            
             return nullptr;
         }
         
         //
         std::vector< ofix::Fixture* > getFixturesWithDefinitionName( std::string name ){
-            
             std::vector< ofix::Fixture* > result;
             auto def = Definition::getDefinitionByName(name);
 			result = def->getFixtures();
             return result;
         }
-        
-        
+		
         Definition* getDefinitionByName( std::string name ){
             return Definition::getDefinitionByName(name);
         }
-        
-        
+		
+		// Dimitre se sentindo burro em 18 de setembro de 2019
+		std::vector< ofix::Definition* > getDefinitions(){
+			std::vector< ofix::Definition*> result;
+			auto definitions = Definition::getDefinitions() ;
+			for(auto& def : definitions){
+				result.push_back( def );
+			}
+			return result;
+		}
+
+		
         std::vector< ofix::Definition* > getDefinitionsWithProperties( std::string name ){
-            
             std::vector< ofix::Definition*> result;
-            
             auto definitions = Definition::getDefinitions() ;
             
-            for(auto& def  :  definitions){
-                
-                if( def->hasCustomPropretie( name )  ){
+            for(auto& def : definitions){
+                if( def->hasCustomProprety( name )  ){
                     result.push_back( def );
                 }
-                
             }
-
             return result;
         }
         
-
-        
         std::vector< ofix::Universe* > getUniverses(){
-            
             std::vector< ofix::Universe* > result;
-            
             for( auto& uni : mUniverses ){
-                
                 result.push_back( &(*uni.second) );
-                
             }
-            
             return result;
         }
         
         Universe* getUniverseByName(const std::string& name ){
-            
             return &(*mUniverses[name]);
         }
-        
-        
+		
         void setChannelInGroup( int channel, int value, std::string groupName, std::string groupTag = "group" ){
-            
             for( auto& fix : getFixturesWithPropertiesValue(groupTag, groupName)){
                 fix->setChannel(channel, value);
             }
-
         }
-		
 		
 		void update() {
 			for (auto & fix : mFixtures) {
@@ -588,18 +493,11 @@ namespace openfixture {
 			}
 		}
         
-		
 		std::vector<FixtureRef> getFixtures(){
 			return mFixtures;
 		}
 		
-		
-
         std::vector<FixtureRef> mFixtures;
         std::map<std::string, std::unique_ptr<Universe> > mUniverses;
-        
-    private:
-        
     };
-    
 }

@@ -20,12 +20,23 @@ namespace openfixture{
     
     
     inline Definition* createDefinitionFromJson(const std::string& json_string ){
-        
         ofxJSON jsonobj( json_string );
-        
-        std::string defNameFiltered = filterString(jsonobj["shortName"].asString());
+		
+        std::string defNameFiltered = filterString(jsonobj["fixtureKey"].asString());
+		if (defNameFiltered == "") {
+			defNameFiltered = filterString(jsonobj["name"].asString());
+
+//			cout << "fixtureKey" << endl;
+//			cout << jsonobj["fixtureKey"].asString() << endl;
+//			cout << "manufacturerKey" << endl;
+//			cout << jsonobj["manufacturerKey"].asString() << endl;
+//			cout << "oflURL" << endl;
+//			cout << jsonobj["oflURL"].asString() << endl;
+		}
+		cout << "createDefinitionFromJson name :: " << defNameFiltered << endl;
         auto def = Definition::createDefinition( defNameFiltered );
-        
+		
+		
         for( const auto& j : jsonobj["modes"] ){
             
             std::map<string, int> channelDef;
@@ -91,25 +102,20 @@ namespace openfixture{
 						mOfix.createDefinitionFromScheme( ofix::loadSchemeFromString( ofBufferFromFile( dir.getPath(i) ).getText() ) );
 					}
 					
-					
 					else if( file.getExtension() == "json" ){
 						Definition* def = createDefinitionFromJson( ofBufferFromFile( dir.getPath(i) ).getText() ) ;
-
 						std::string additionalInfoFile = ofSplitString(dir.getFile(i).getFileName(), ".")[0] + ".txt";
 						
-						ofFile extensionFile( ofToDataPath( folder_path + "/extensions/" + additionalInfoFile) );
+						string file = folder_path + "extensions/" + additionalInfoFile;
+						//cout << file << endl;
+						
+						ofFile extensionFile( ofToDataPath( file ) );
 						
 						if( extensionFile.exists()  ){
-							
-							
-							
+							cout << "using extensionFile ::" << file << endl;
 							std::vector <std::vector <std::string>> scheme = ofix::loadSchemeFromString( ofBufferFromFile( extensionFile.path() ).getText() );
-							
-							
 							mOfix.appendSchemeToDefinition( def, scheme );
-							
 						}
-						
 					}
 				}
 			}
@@ -143,28 +149,24 @@ namespace openfixture{
             {
                 auto s = filterString(line);
                 
-                
                 if( s[0] == '[' ){
                     // start a new fixture scheme
-                    
 //                    cout << "current IP" << endl;
-                    
                     currentIp = s;
                     currentIp.pop_back();
                     currentIp.erase(0,1);
-                    
                 }
                 
                 else if(s[0] == '#' || s == ""){
                     // ignore comments & empty lines
                     continue;
                 }
-                else{
+                else {
                     // add properties
                     
-                    if(currentIp == "" ){
+                    if (currentIp == "" ){
                         std::cout << "error setting value without a ip address" << std::endl;
-                    }else{
+                    } else {
 
                         vector<string> uniId = ofix::split(line, '_');
 
